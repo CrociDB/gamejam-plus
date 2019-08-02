@@ -1,0 +1,12 @@
+body {
+    background-color: black;
+}
+
+#game-canvas {
+    width: 800px;
+    height: 480px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border: 3px solid white;
+}
