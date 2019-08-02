@@ -72,12 +72,14 @@ function initWebGL()
     let aspectRatioUniform = gl.getUniformLocation(program, "aspectRatio");
     
     let input = new Input(canvas);
+    let dialog = new Dialog("dialog");
 
     let stateManager = new StateManager({
         gl: gl, 
         program: program, 
-        input: input });
-    stateManager.setState(new GameplayState());
+        input: input,
+        dialog: dialog });
+    stateManager.setState(new MenuState());
 
     let loop = (timestamp) => {
         // Render
@@ -98,6 +100,7 @@ function initWebGL()
 
         stateManager.update();
         input.update(timestamp);
+        dialog.setBlink(input.blink);
 
         // Default uniform data
         gl.uniform1f(timeUniform, timestamp);

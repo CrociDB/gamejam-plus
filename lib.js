@@ -1,7 +1,6 @@
 let lerp = (a, b, t) => (1 - t) * a + t * b;
 
 // Vector3
-
 class Vec3 {
     constructor(x, y, z) {
         this.x = x;
@@ -57,3 +56,17 @@ Vec3.lerp = (a, b, t) => new Vec3(
 Vec3.right = new Vec3(1, 0, 0);
 Vec3.up = new Vec3(0, 1, 0);
 Vec3.forward = new Vec3(0, 0, 1);
+
+// Coroutine
+const co = (f) => {
+    let g = f();
+
+    const next = () => {
+        let result = g.next();
+        if (!result.done) {
+            setTimeout(next, result.value * 1000);
+        }
+    };
+
+    next();
+};

@@ -21,6 +21,12 @@ body {
     border: 3px solid #EE7147;
 }
 
+.hidden {
+    position: absolute;
+    visibility: hidden !important;
+    opacity: 0.0;
+}
+
 /* Dialog */
 #dialog {
     position: fixed;

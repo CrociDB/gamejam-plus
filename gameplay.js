@@ -21,6 +21,7 @@ class GameplayState {
     update() {
         let gl = this.manager.params.gl;
         let input = this.manager.params.input;
+        let dialog = this.manager.params.dialog;
         
         this.dist += input.mouse.dy * .01;
         this.dist = Math.min(20, Math.max(11, this.dist));
@@ -51,8 +52,10 @@ class GameplayState {
 
         if (input.blink == 1) {
             console.log("LEFT");
+            dialog.show("LEFT");
         } else if (input.blink == 2) {
             console.log("RIGHT");
+            dialog.show("RIGHT");
         }
 
         this.cameraPos = this.cameraPos.add(Vec3.up.muls(this.dist - 5));
