@@ -49,6 +49,12 @@ class GameplayState {
             this.box = this.box.add(dir.muls(-this.speed));
         }
 
+        if (input.blink == 1) {
+            console.log("LEFT");
+        } else if (input.blink == 2) {
+            console.log("RIGHT");
+        }
+
         this.cameraPos = this.cameraPos.add(Vec3.up.muls(this.dist - 5));
         
         gl.uniform3f(this.un_cp, 

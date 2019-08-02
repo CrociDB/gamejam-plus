@@ -97,6 +97,7 @@ function initWebGL()
             2, gl.FLOAT, false, 5 * 4, 3 * 4);
 
         stateManager.update();
+        input.update(timestamp);
 
         // Default uniform data
         gl.uniform1f(timeUniform, timestamp);
