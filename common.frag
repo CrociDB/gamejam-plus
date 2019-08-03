@@ -218,6 +218,12 @@ float sdTriPrism( vec3 p, vec2 h )
     return max(q.z-h.y,max(q.x*0.866025+p.y*0.5,-p.y)-h.x*0.5);
 }
 
+float sdOctahedron( in vec3 p, in float s)
+{
+    p = abs(p);
+    return (p.x+p.y+p.z-s)*0.57735027;
+}
+
 float rounding( in float d, in float h )
 {
     return d - h;

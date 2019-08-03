@@ -18,6 +18,10 @@ uniform vec3 camera_pos;
 uniform vec3 ship_pos;
 uniform float ship_angle;
 
+uniform vec3 obstacle1;
+uniform vec3 obstacle2;
+uniform vec3 obstacle3;
+
 const vec3 corner_pos = vec3(-14.1, -2.0, -1.);
 vec3 light_pos = vec3(13.5, 20.5, 8.0);
 
@@ -77,9 +81,21 @@ object ship(vec3 p)
     return object(f, OBJ_SHIP);
 }
 
+float obstacle(vec3 p) {
+    float o = sdOctahedron(p, 3.0);
+    return o;
+}
+
 object getDist(vec3 p)
 {
     object ofloor = ofloor(p - vec3(0.0, 0.0, 0.0));
+
+    const float s = .7;
+    float obs1 = obstacle((p - obstacle1) * rotateY(time * 2.0));
+    float obs2 = obstacle((p - obstacle2) * rotateY(time * 2.0));
+    float obs3 = obstacle((p - obstacle3) * rotateY(time * 2.0));
+
+    ofloor.d = opSmoothUnion(opSmoothUnion(opSmoothUnion(obs1, obs2, s), obs3, s), ofloor.d, s);
     
     vec3 b = (p - ship_pos);// * rotateY(ship_angle); 
     object ship = ship(b);

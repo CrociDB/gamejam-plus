@@ -29,6 +29,11 @@ class GameplayState {
 class GameLevel {
     enter(manager) {
         this.manager = manager;
+
+        this.obstacles = [
+            new Vec3(5, 5, 0),
+            new Vec3(10, 5, 0),
+            new Vec3(15, 5, 0) ];
     }
 
     update() {
@@ -80,6 +85,10 @@ class GameLevel {
         shader.uniformv("camera_pos", game.cameraPos);
         shader.uniformv("ship_pos", game.shipPos);
         shader.uniform1f("ship_angle", angle);
+        
+        for (let i = 0; i < this.obstacles.length; i++) {
+            shader.uniformv("obstacle" + (i + 1), this.obstacles[i]);
+        }
     }
 
     exit() {

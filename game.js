@@ -139,11 +139,12 @@ function initWebGL()
             2, gl.FLOAT, false, 5 * 4, 3 * 4);
 
         stateManager.update();
+        stateManager.time = timestamp;
         input.update(timestamp);
         dialog.setBlink(input.blink);
 
         // Default uniform data
-        shader.uniform1f("time", timestamp);
+        shader.uniform1f("time", timestamp * .001);
         shader.uniform1f("aspectRatio", width / height);
 
         let primitiveType = gl.TRIANGLES;
