@@ -17,9 +17,18 @@ class MenuState {
         this.un_ba = manager.params.gl.getUniformLocation(
             manager.params.program, "box_angle");
 
+
         let dialog = this.manager.params.dialog;
-        dialog.show("This is a test. Blink twice to proceed.", null, () => {
-            dialog.show("Nice", null, null);
+        dialog.show("Press SPACE to start", () => {
+            dialog.show("Okay. Let's go.", this.startGame.bind(this), null);
+        }, null);
+    }
+
+    startGame() {
+        let that = this;
+        co(function*() {
+            yield 1;
+            that.manager.setState(new GameplayState());
         });
     }
 
