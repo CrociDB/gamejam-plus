@@ -79,9 +79,17 @@ function initWebGL()
     // Getting shaders
     let vertexCode = document.getElementById("game-vertex-shader").text;
     let fragmentCode = document.getElementById("game-fragment-shader").text;
+    let menuFragmentCode = document.getElementById("menu-fragment-shader").text;
     let fragmentCommonCode = document.getElementById("game-fragment-common").text;
 
     fragmentCode = fragmentCode.replace("#include \"common.frag\"", fragmentCommonCode);
+    menuFragmentCode = menuFragmentCode.replace("#include \"common.frag\"", fragmentCommonCode);
+
+    let shaderCodes = {
+        mainVertex: vertexCode,
+        gameFragment: fragmentCode,
+        menuFragmentCode: menuFragmentCode
+    }
 
     let shader = new Shader(gl);
     shader.setShaders(vertexCode, fragmentCode);
@@ -108,6 +116,7 @@ function initWebGL()
     let stateManager = new StateManager({
         gl: gl, 
         shader: shader, 
+        shaderCodes: shaderCodes, 
         input: input,
         dialog: dialog });
     stateManager.setState(new GameplayState());

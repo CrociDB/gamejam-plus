@@ -8,6 +8,10 @@ class GameplayState {
         this.cameraPos = new Vec3(-5, 10, -20);
         this.shipPos = new Vec3(0, 2.6, 0);
 
+        let shader = this.manager.params.shader;
+        let shaderCodes = this.manager.params.shaderCodes;
+        shader.setShaders(shaderCodes.mainVertex, shaderCodes.gameFragment);
+
         this.state = new StateManager(this.params);
         this.state.game = this;
         this.state.setState(new GameLevel());

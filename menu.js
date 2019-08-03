@@ -6,17 +6,11 @@ class MenuState {
         this.dist = 12;
 
         this.cameraPos = new Vec3(-5, 10, -20);
-        this.box = new Vec3(0, 2.6, 0);
+        this.shipPos = new Vec3(0, 2.6, 0);
 
-        this.un_cp = manager.params.gl.getUniformLocation(
-            manager.params.program, "camera_pos");
-
-        this.un_cl = manager.params.gl.getUniformLocation(
-            manager.params.program, "box_pos");
-
-        this.un_ba = manager.params.gl.getUniformLocation(
-            manager.params.program, "box_angle");
-
+        let shader = this.manager.params.shader;
+        let shaderCodes = this.manager.params.shaderCodes;
+        shader.setShaders(shaderCodes.mainVertex, shaderCodes.menuFragmentCode);
 
         let dialog = this.manager.params.dialog;
         dialog.show("Press SPACE to start", () => {
@@ -35,6 +29,10 @@ class MenuState {
     update() {
         let gl = this.manager.params.gl;
         let input = this.manager.params.input;
+        let shader = this.manager.params.shader;
+
+        shader.uniformv("camera_pos", this.cameraPos);
+        shader.uniformv("ship_pos", this.shipPos);
     }
 
     exit() {
