@@ -6,48 +6,68 @@ class GameplayState {
         this.dist = 12;
 
         this.cameraPos = new Vec3(-5, 10, -20);
-        this.box = new Vec3(0, 2.6, 0);
+        this.shipPos = new Vec3(0, 2.6, 0);
+
+        this.state = new StateManager(this.params);
+        this.state.game = this;
+        this.state.setState(new GameLevel());
 
         this.un_cp = manager.params.gl.getUniformLocation(
             manager.params.program, "camera_pos");
 
         this.un_cl = manager.params.gl.getUniformLocation(
-            manager.params.program, "box_pos");
+            manager.params.program, "ship_pos");
 
         this.un_ba = manager.params.gl.getUniformLocation(
-            manager.params.program, "box_angle");
+            manager.params.program, "ship_angle");
     }
 
     update() {
-        let gl = this.manager.params.gl;
-        let input = this.manager.params.input;
-        let dialog = this.manager.params.dialog;
+        this.state.update();
+    }
+
+    exit() {
+    }
+}
+
+// Main gameplay
+class GameLevel {
+    enter(manager) {
+        this.manager = manager;
+    }
+
+    update() {
+        let game = this.manager.game;
+        let gl = game.manager.params.gl;
+        let input = game.manager.params.input;
+        let dialog = game.manager.params.dialog;
+
         
-        this.dist += input.mouse.dy * .01;
-        this.dist = Math.min(20, Math.max(11, this.dist));
-
+        game.dist += input.mouse.dy * .01;
+        game.dist = Math.min(20, Math.max(11, game.dist));
+        
         let angle = input.mouse.x * -.001;
-
-        this.cameraPos = this.box.add(new Vec3(
-            Math.cos(angle) * -this.dist, 
+        
+        game.cameraPos = game.shipPos.add(new Vec3(
+            Math.cos(angle) * -game.dist, 
             0, 
-            Math.sin(angle) * -this.dist));
-
-        let dir = this.box.sub(this.cameraPos).norm;
+            Math.sin(angle) * -game.dist));
+            
+        let dir = game.shipPos.sub(game.cameraPos).norm;
         let sidedir = dir.cross(Vec3.up);
 
         if (input.key(Input.A)) {
-            this.box = this.box.add(sidedir.muls(this.speed));
+            game.shipPos = game.shipPos.add(sidedir.muls(game.speed));
         }
         else if(input.key(Input.D)) {
-            this.box = this.box.add(sidedir.muls(-this.speed));
+            game.shipPos = game.shipPos.add(sidedir.muls(-game.speed));
         }
         
         if (input.key(Input.W)) {
-            this.box = this.box.add(dir.muls(this.speed));
+            game.shipPos = game.shipPos.add(dir.muls(game.speed));
         }
         else if (input.key(Input.S)) {
-            this.box = this.box.add(dir.muls(-this.speed));
+            game.shipPos = game.shipPos.add(dir.muls(-game.speed));
         }
 
         if (input.blink == 1) {
@@ -58,22 +78,24 @@ class GameplayState {
             dialog.show("RIGHT");
         }
 
-        this.cameraPos = this.cameraPos.add(Vec3.up.muls(this.dist - 5));
+        game.cameraPos = game.cameraPos.add(Vec3.up.muls(game.dist - 5));
         
-        gl.uniform3f(this.un_cp, 
-            this.cameraPos.x, 
-            this.cameraPos.y, 
-            this.cameraPos.z);
+        // Send Uniforms
+        gl.uniform3f(game.un_cp, 
+            game.cameraPos.x, 
+            game.cameraPos.y, 
+            game.cameraPos.z);
 
-        gl.uniform3f(this.un_cl, 
-            this.box.x, 
-            this.box.y, 
-            this.box.z);
+        gl.uniform3f(game.un_cl, 
+            game.shipPos.x, 
+            game.shipPos.y, 
+            game.shipPos.z);
 
         gl.uniform1f(this.un_ba, 
             angle);
     }
 
     exit() {
+        
     }
 }

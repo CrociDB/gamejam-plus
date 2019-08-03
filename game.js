@@ -79,7 +79,7 @@ function initWebGL()
         program: program, 
         input: input,
         dialog: dialog });
-    stateManager.setState(new MenuState());
+    stateManager.setState(new GameplayState());
 
     let loop = (timestamp) => {
         // Render

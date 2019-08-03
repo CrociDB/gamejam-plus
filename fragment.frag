@@ -15,8 +15,8 @@ uniform float aspectRatio;
 #define SURF_DIST .004
 
 uniform vec3 camera_pos;
-uniform vec3 box_pos;
-uniform float box_angle;
+uniform vec3 ship_pos;
+uniform float ship_angle;
 
 const vec3 corner_pos = vec3(-14.1, -2.0, -1.);
 vec3 light_pos = vec3(13.5, 20.5, 8.0);
@@ -74,7 +74,7 @@ object getDist(vec3 p)
 {
     object ofloor = ofloor(p - vec3(0.0, 0.0, 0.0));
     
-    vec3 b = (p - box_pos) * rotateY(box_angle); 
+    vec3 b = (p - ship_pos) * rotateY(ship_angle); 
     object wood = wood(b);
     
     return closest(wood, ofloor);
@@ -283,7 +283,7 @@ vec3 render(object o, vec3 p, vec3 ro, vec3 rd, vec2 suv)
         vl = 0.2;
         
     	vec3 l = lighting(normal, rd, p, 4.0);
-        vec2 uv = fract(triplanar_map(p * rotateY(box_angle), box_pos * rotateY(box_angle), normal) * 0.1 + 0.5);
+        vec2 uv = fract(triplanar_map(p * rotateY(ship_angle), ship_pos * rotateY(ship_angle), normal) * 0.1 + 0.5);
         vec3 t = texture_wood(uv);
         float ao = ambientOcclusion(p, normal);
         color = (ao * t * .5) + (t * l.r * shadow) + (l.g * .2 * shadow);
@@ -300,7 +300,7 @@ vec4 color(vec2 uv)
     
 	vec3 rd = normalize(vec3(uv.x - 0.80, uv.y - 0.3, 1.0));
     
-    rd = (viewMatrix(box_pos, ro, vec_up) * vec4(rd, 1.0)).xyz;
+    rd = (viewMatrix(ship_pos, ro, vec_up) * vec4(rd, 1.0)).xyz;
     
     object o = rayMarch(ro, rd);
     vec3 p = ro + rd * o.d;
