@@ -52,7 +52,6 @@ object wall(vec3 p)
     float front = opSmoothSubtraction(h, f, 0.5);
     
     float side = sdBox(p + vec3(15.0, 0.0, 7.5), vec3(0.8, 15.42, 6.8));
-
     
     return object(min(side, front), OBJ_WALL);
 }
@@ -65,16 +64,24 @@ object ofloor(vec3 p)
 
 object ship(vec3 p)
 {
-    float final = sdBox(p, vec3(2.0, 2.0, 2.0));
+    float cap = sdCapsule(p, vec3(3.0, 1.0, 1.0), vec3(1.0), 0.6);
+    float cockpit = sdSphere(p - vec3(2.5, 1.3, 1.0), .5);
+    float back = sdCapsule(p, vec3(1.0, 1.0, 1.0), vec3(1.0), 0.9);
+    float wings = sdBox(p - vec3(2.0, 0.8, 1.0), vec3(1.0, 0.1, 2.0));
+    float wings2 = sdBox(p - vec3(1.5, 0.8, 1.0), vec3(0.4, 0.1, 3.0));
+    float backHole = sdCapsule(p + vec3(0.8, 0.0, 0.0), vec3(1.0, 1.0, 1.0), vec3(1.0), 0.8);
 
-    return object(final, OBJ_SHIP);
+    float f = opSmoothUnion(opSmoothUnion(opSmoothUnion(opSmoothUnion(cap, cockpit, .4), back, .4), wings, .6), wings2, .8);
+    f = opSmoothSubtraction(backHole, f, .2);
+
+    return object(f, OBJ_SHIP);
 }
 
 object getDist(vec3 p)
 {
     object ofloor = ofloor(p - vec3(0.0, 0.0, 0.0));
     
-    vec3 b = (p - ship_pos) * rotateY(ship_angle); 
+    vec3 b = (p - ship_pos);// * rotateY(ship_angle); 
     object ship = ship(b);
     
     return closest(ofloor, ship);
