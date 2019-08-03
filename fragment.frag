@@ -16,7 +16,9 @@ uniform float aspectRatio;
 
 uniform vec3 camera_pos;
 uniform vec3 ship_pos;
+uniform vec3 ship_initial_pos;
 uniform float ship_angle;
+uniform float ship_sign;
 
 uniform vec3 obstacle1;
 uniform vec3 obstacle2;
@@ -104,8 +106,9 @@ object getDist(vec3 p)
     
     float vp = (sin(time * 4.) + 1.0) * .3;
     float vr = (cos(time * 4.)) * .1;
+    float vv = (ship_angle - 1.0) * .1 * ship_sign * PI;
     vec3 b = (p - ship_pos) + vec3(0.0, vp, 0.0);// * rotateY(ship_angle); 
-    object ship = ship(b  * rotateY(PI * .5) * rotateZ(vr));
+    object ship = ship(b  * rotateY(PI * .5) * rotateZ(vr) *  rotateX(vv));
     
     return closest(ofloor, ship);
 }
@@ -336,7 +339,8 @@ vec4 color(vec2 uv)
 
 	vec3 rd = normalize(vec3(uv.x - 0.90, uv.y - 0.3, 1.0));
     
-    rd = (viewMatrix(ship_pos, ro, vec_up) * vec4(rd, 1.0)).xyz;
+    vec3 pos = mix(ship_initial_pos, ship_pos, .2);
+    rd = (viewMatrix(pos, ro, vec_up) * vec4(rd, 1.0)).xyz;
     
     object o = rayMarch(ro, rd);
     vec3 p = ro + rd * o.d;

@@ -25,6 +25,52 @@ class GameplayState {
     }
 }
 
+class ShipMovement {
+    constructor(shipPos, lanes) {
+        this.shipPos = shipPos;
+        this.lanes = lanes;
+
+        this.oldPos = 1;
+        this.currentPos = 1;
+        this.movement = 1.0;
+        this.sign = 1.0;
+    }
+    
+    moveRight() {
+        console.dir(this.currentPos);
+        if (this.currentPos < 2 && this.movement > 0.999) {
+            this.oldPos = this.currentPos;
+            this.currentPos++;
+            this.movement = 0;
+            this.sign = -1.0;
+        }
+    }
+    
+    moveLeft() {
+        if (this.currentPos > 0 && this.movement > 0.999) {
+            this.oldPos = this.currentPos;
+            this.currentPos--;
+            this.movement = 0;
+            this.sign = 1.0;
+        }
+    }
+
+    update() {
+        this.movement = Math.min(this.movement + 0.05, 1.0);
+        if (this.movement <= 1.0) {
+            this.shipPos = Vec3.lerp(this.lanes[this.oldPos], this.lanes[this.currentPos], Math.sqrt(this.movement));
+        }
+    }
+
+    get pos() {
+        return this.shipPos;
+    }
+
+    get mov() {
+        return this.movement;
+    }
+}
+
 // Main gameplay
 class GameLevel {
     enter(manager) {
@@ -41,6 +87,8 @@ class GameLevel {
             new Vec3(10, 2.2, 0),
         ];
 
+        this.ship = new ShipMovement(this.manager.game.shipPos, this.shipLanes);
+
         this.obstacles = [
             new Vec3(10, 5, 5),
             new Vec3(0, 5, 10),
@@ -53,7 +101,6 @@ class GameLevel {
         let input = game.manager.params.input;
         let dialog = game.manager.params.dialog;
         let shader = game.manager.params.shader;
-
         
         game.dist += input.mouse.dy * .01;
         game.dist = Math.min(20, Math.max(11, game.dist));
@@ -65,11 +112,13 @@ class GameLevel {
         let dir = game.shipPos.sub(game.cameraPos).norm;
         let sidedir = dir.cross(Vec3.up);
 
+        this.ship.update();
         if (input.blink == 1) {
-            console.log("LEFT");
+            this.ship.moveLeft();
         } else if (input.blink == 2) {
-            console.log("RIGHT");
+            this.ship.moveRight();
         }
+        game.shipPos = this.ship.pos;
 
         game.cameraPos = game.cameraPos.add(Vec3.up.muls(game.dist - 5));
 
@@ -78,8 +127,10 @@ class GameLevel {
         // Send Uniforms
         shader.uniformv("camera_pos", game.cameraPos);
         shader.uniformv("ship_pos", game.shipPos);
+        shader.uniformv("ship_initial_pos", this.shipLanes[1]);
         shader.uniformv("background", this.background);
-        shader.uniform1f("ship_angle", angle);
+        shader.uniform1f("ship_angle", this.ship.mov);
+        shader.uniform1f("ship_sign", this.ship.sign);
         shader.uniform1f("base_depth", this.baseDepth);
         
         for (let i = 0; i < this.obstacles.length; i++) {
