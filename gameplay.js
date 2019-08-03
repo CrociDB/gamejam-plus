@@ -30,6 +30,15 @@ class GameLevel {
     enter(manager) {
         this.manager = manager;
 
+        this.baseDepth = 0;
+        this.speed = .3;
+        
+        this.shipLanes = [
+            new Vec3(-10, 2.6, 0),
+            new Vec3(0, 2.6, 0),
+            new Vec3(10, 2.6, 0),
+        ];
+
         this.obstacles = [
             new Vec3(10, 5, 5),
             new Vec3(0, 5, 10),
@@ -49,39 +58,26 @@ class GameLevel {
         
         let angle = input.mouse.x * -.001;
         
-        game.cameraPos = game.shipPos.add(new Vec3(0, 0, -game.dist));
+        game.cameraPos = this.shipLanes[1].add(new Vec3(0, 0, -game.dist));
             
         let dir = game.shipPos.sub(game.cameraPos).norm;
         let sidedir = dir.cross(Vec3.up);
 
-        if (input.key(Input.A)) {
-            game.shipPos = game.shipPos.add(Vec3.right.muls(-game.speed));
-        }
-        else if(input.key(Input.D)) {
-            game.shipPos = game.shipPos.add(Vec3.right.muls(game.speed));
-        }
-        
-        if (input.key(Input.W)) {
-            game.shipPos = game.shipPos.add(Vec3.forward.muls(game.speed));
-        }
-        else if (input.key(Input.S)) {
-            game.shipPos = game.shipPos.add(Vec3.forward.muls(-game.speed));
-        }
-
         if (input.blink == 1) {
             console.log("LEFT");
-            dialog.show("LEFT");
         } else if (input.blink == 2) {
             console.log("RIGHT");
-            dialog.show("RIGHT");
         }
 
         game.cameraPos = game.cameraPos.add(Vec3.up.muls(game.dist - 5));
+
+        this.baseDepth -= this.speed;
         
         // Send Uniforms
         shader.uniformv("camera_pos", game.cameraPos);
         shader.uniformv("ship_pos", game.shipPos);
         shader.uniform1f("ship_angle", angle);
+        shader.uniform1f("base_depth", this.baseDepth);
         
         for (let i = 0; i < this.obstacles.length; i++) {
             shader.uniformv("obstacle" + (i + 1), this.obstacles[i]);

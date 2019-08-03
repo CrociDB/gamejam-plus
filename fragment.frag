@@ -22,6 +22,8 @@ uniform vec3 obstacle1;
 uniform vec3 obstacle2;
 uniform vec3 obstacle3;
 
+uniform float base_depth;
+
 const vec3 corner_pos = vec3(-14.1, -2.0, -1.);
 vec3 light_pos = vec3(13.5, 20.5, 8.0);
 
@@ -62,7 +64,7 @@ object wall(vec3 p)
 
 object ofloor(vec3 p)
 {
-    float f = sdBox(p, vec3(20.0, 1.0, 40.0));
+    float f = sdBox(p - vec3(-2.5, 0.0, 30.0), vec3(20.0, 1.0, 60.0));
     return object(f, OBJ_FLOOR);
 }
 
@@ -88,12 +90,13 @@ float obstacle(vec3 p) {
 
 object getDist(vec3 p)
 {
-    object ofloor = ofloor(p - vec3(0.0, 0.0, 0.0));
+    vec3 d = vec3(0, 0, base_depth);
+    object ofloor = ofloor(p);
 
     const float s = .7;
-    float obs1 = obstacle((p - obstacle1) * rotateY(time * 2.0));
-    float obs2 = obstacle((p - obstacle2) * rotateY(time * 2.0));
-    float obs3 = obstacle((p - obstacle3) * rotateY(time * 2.0));
+    float obs1 = obstacle((p - obstacle1 - d) * rotateY(time * 2.0));
+    float obs2 = obstacle((p - obstacle2 - d) * rotateY(time * 2.0));
+    float obs3 = obstacle((p - obstacle3 - d) * rotateY(time * 2.0));
 
     ofloor.d = opSmoothUnion(opSmoothUnion(opSmoothUnion(obs1, obs2, s), obs3, s), ofloor.d, s);
     
@@ -274,7 +277,8 @@ vec3 render(object o, vec3 p, vec3 ro, vec3 rd, vec2 suv)
     }
     else if (o.id == OBJ_FLOOR)
     {
-        vec2 uv = triplanar_map(p, vec3(0.0, 0.0, 0.0), normal);
+        vec3 d = vec3(0, 0, base_depth);
+        vec2 uv = triplanar_map(p, d, normal);
         uv = fract(uv * 0.028 + 0.2);
         vec3 t = texture_floor(uv);
         
