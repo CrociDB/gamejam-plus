@@ -62,7 +62,7 @@ object wall(vec3 p)
 
 object ofloor(vec3 p)
 {
-    float f = sdBox(p, vec3(60.0, 1.0, 60.0));
+    float f = sdBox(p, vec3(20.0, 1.0, 40.0));
     return object(f, OBJ_FLOOR);
 }
 
@@ -97,8 +97,10 @@ object getDist(vec3 p)
 
     ofloor.d = opSmoothUnion(opSmoothUnion(opSmoothUnion(obs1, obs2, s), obs3, s), ofloor.d, s);
     
-    vec3 b = (p - ship_pos);// * rotateY(ship_angle); 
-    object ship = ship(b);
+    float vp = (sin(time * 4.) + 1.0) * .3;
+    float vr = (cos(time * 4.)) * .1;
+    vec3 b = (p - ship_pos) + vec3(0.0, vp, 0.0);// * rotateY(ship_angle); 
+    object ship = ship(b  * rotateY(PI * .5) * rotateZ(vr));
     
     return closest(ofloor, ship);
 }
@@ -207,7 +209,7 @@ vec3 texture_floor(vec2 uv)
 {
     vec2 iuv = floor(uv * 10.0);
     float v = float(mod(iuv.x + iuv.y, 2.0) <= 0.01);
-    vec3 col = vec3(0.4 + 0.5 * v) * fbm(uv * 15.5) * vec3(0.75, 0.68, 0.591);
+    vec3 col = vec3(0.1 + 0.3 * v) * vec3(0.75, 0.68, 0.591);
     return col;
 }
 
@@ -320,7 +322,7 @@ vec4 color(vec2 uv)
 {
     vec3 ro = camera_pos;
     
-	vec3 rd = normalize(vec3(uv.x - 0.80, uv.y - 0.3, 1.0));
+	vec3 rd = normalize(vec3(uv.x - 0.90, uv.y - 0.3, 1.0));
     
     rd = (viewMatrix(ship_pos, ro, vec_up) * vec4(rd, 1.0)).xyz;
     

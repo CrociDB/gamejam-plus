@@ -31,9 +31,9 @@ class GameLevel {
         this.manager = manager;
 
         this.obstacles = [
-            new Vec3(5, 5, 0),
-            new Vec3(10, 5, 0),
-            new Vec3(15, 5, 0) ];
+            new Vec3(10, 5, 5),
+            new Vec3(0, 5, 10),
+            new Vec3(-10, 5, 15) ];
     }
 
     update() {
@@ -49,26 +49,23 @@ class GameLevel {
         
         let angle = input.mouse.x * -.001;
         
-        game.cameraPos = game.shipPos.add(new Vec3(
-            Math.cos(angle) * -game.dist, 
-            0, 
-            Math.sin(angle) * -game.dist));
+        game.cameraPos = game.shipPos.add(new Vec3(0, 0, -game.dist));
             
         let dir = game.shipPos.sub(game.cameraPos).norm;
         let sidedir = dir.cross(Vec3.up);
 
         if (input.key(Input.A)) {
-            game.shipPos = game.shipPos.add(sidedir.muls(game.speed));
+            game.shipPos = game.shipPos.add(Vec3.right.muls(-game.speed));
         }
         else if(input.key(Input.D)) {
-            game.shipPos = game.shipPos.add(sidedir.muls(-game.speed));
+            game.shipPos = game.shipPos.add(Vec3.right.muls(game.speed));
         }
         
         if (input.key(Input.W)) {
-            game.shipPos = game.shipPos.add(dir.muls(game.speed));
+            game.shipPos = game.shipPos.add(Vec3.forward.muls(game.speed));
         }
         else if (input.key(Input.S)) {
-            game.shipPos = game.shipPos.add(dir.muls(-game.speed));
+            game.shipPos = game.shipPos.add(Vec3.forward.muls(-game.speed));
         }
 
         if (input.blink == 1) {
