@@ -28,7 +28,7 @@ const vec3 vec_forward = vec3(0.0, 0.0, 1.0);
 #define OBJ_EMPTY 0
 #define OBJ_WALL 2
 #define OBJ_FLOOR 4
-#define OBJ_WOOD 3
+#define OBJ_SHIP 3
 
 struct object
 {
@@ -63,24 +63,23 @@ object ofloor(vec3 p)
     return object(f, OBJ_FLOOR);
 }
 
-object wood(vec3 p)
+object ship(vec3 p)
 {
     float final = sdBox(p, vec3(2.0, 2.0, 2.0));
 
-    return object(final, OBJ_WOOD);
+    return object(final, OBJ_SHIP);
 }
 
-object getDist(vec3 p) 
+object getDist(vec3 p)
 {
     object ofloor = ofloor(p - vec3(0.0, 0.0, 0.0));
     
     vec3 b = (p - ship_pos) * rotateY(ship_angle); 
-    object wood = wood(b);
+    object ship = ship(b);
     
-    return closest(wood, ofloor);
+    return closest(ofloor, ship);
 }
 
-    
 object rayMarch(vec3 ro, vec3 rd)
 {
     object obj;
@@ -189,7 +188,7 @@ vec3 texture_floor(vec2 uv)
     return col;
 }
 
-vec3 texture_wood(vec2 uv)
+vec3 texture_ship(vec2 uv)
 {
     uv.x *= .8;
     
@@ -278,13 +277,13 @@ vec3 render(object o, vec3 p, vec3 ro, vec3 rd, vec2 suv)
     {
         color = render_wall(o, p, rd, normal);
     }
-    else if (o.id == OBJ_WOOD)
+    else if (o.id == OBJ_SHIP)
     {
         vl = 0.2;
         
     	vec3 l = lighting(normal, rd, p, 4.0);
         vec2 uv = fract(triplanar_map(p * rotateY(ship_angle), ship_pos * rotateY(ship_angle), normal) * 0.1 + 0.5);
-        vec3 t = texture_wood(uv);
+        vec3 t = texture_ship(uv);
         float ao = ambientOcclusion(p, normal);
         color = (ao * t * .5) + (t * l.r * shadow) + (l.g * .2 * shadow);
     }
