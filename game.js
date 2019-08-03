@@ -32,6 +32,42 @@ function createProgram(gl, vertexShader, fragmentShader) {
     gl.deleteProgram(program);
 }
 
+class Shader {
+    constructor(gl) {
+        this.gl = gl;
+        this.uniforms = {};
+    }
+
+    setShaders(v, f) {
+        let gl = this.gl;
+        let vsh = createShader(gl, gl.VERTEX_SHADER, v);
+        let fsh = createShader(gl, gl.FRAGMENT_SHADER, f);
+
+        this.program = createProgram(gl, vsh, fsh);
+        this.uniforms = {};
+    }
+
+    use() {
+        this.gl.useProgram(this.program);
+    }
+
+    u(uniform) {
+        if (this.uniforms[uniform] === undefined) {
+            this.uniforms[uniform] = this.gl.getUniformLocation(this.program, uniform);
+        }
+
+        return this.uniforms[uniform];
+    }
+
+    uniform1f(uniform, v) {
+        this.gl.uniform1f(this.u(uniform), v);
+    }
+    
+    uniformv(uniform, vec) {
+        this.gl.uniform3f(this.u(uniform), vec.x, vec.y, vec.z);
+    }
+}
+
 function initWebGL()
 {
     canvas = document.getElementById("game-canvas");
@@ -47,10 +83,8 @@ function initWebGL()
 
     fragmentCode = fragmentCode.replace("#include \"common.frag\"", fragmentCommonCode);
 
-    let vsh = createShader(gl, gl.VERTEX_SHADER, vertexCode);
-    let fsh = createShader(gl, gl.FRAGMENT_SHADER, fragmentCode);
-
-    let program = createProgram(gl, vsh, fsh);
+    let shader = new Shader(gl);
+    shader.setShaders(vertexCode, fragmentCode);
 
     let positionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
@@ -67,16 +101,13 @@ function initWebGL()
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-
-    let timeUniform = gl.getUniformLocation(program, "time");
-    let aspectRatioUniform = gl.getUniformLocation(program, "aspectRatio");
     
     let input = new Input(canvas);
     let dialog = new Dialog("dialog");
 
     let stateManager = new StateManager({
         gl: gl, 
-        program: program, 
+        shader: shader, 
         input: input,
         dialog: dialog });
     stateManager.setState(new GameplayState());
@@ -86,7 +117,7 @@ function initWebGL()
         gl.clearColor(0, 0, 0, 0);
         gl.clear(gl.COLOR_BUFFER_BIT);
 
-        gl.useProgram(program);
+        shader.use();
 
         gl.enableVertexAttribArray(0);
         gl.enableVertexAttribArray(1);
@@ -103,8 +134,8 @@ function initWebGL()
         dialog.setBlink(input.blink);
 
         // Default uniform data
-        gl.uniform1f(timeUniform, timestamp);
-        gl.uniform1f(aspectRatioUniform, width / height);
+        shader.uniform1f("time", timestamp);
+        shader.uniform1f("aspectRatio", width / height);
 
         let primitiveType = gl.TRIANGLES;
         offset = 0;

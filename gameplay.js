@@ -11,15 +11,6 @@ class GameplayState {
         this.state = new StateManager(this.params);
         this.state.game = this;
         this.state.setState(new GameLevel());
-
-        this.un_cp = manager.params.gl.getUniformLocation(
-            manager.params.program, "camera_pos");
-
-        this.un_cl = manager.params.gl.getUniformLocation(
-            manager.params.program, "ship_pos");
-
-        this.un_ba = manager.params.gl.getUniformLocation(
-            manager.params.program, "ship_angle");
     }
 
     update() {
@@ -41,6 +32,7 @@ class GameLevel {
         let gl = game.manager.params.gl;
         let input = game.manager.params.input;
         let dialog = game.manager.params.dialog;
+        let shader = game.manager.params.shader;
 
         
         game.dist += input.mouse.dy * .01;
@@ -81,18 +73,9 @@ class GameLevel {
         game.cameraPos = game.cameraPos.add(Vec3.up.muls(game.dist - 5));
         
         // Send Uniforms
-        gl.uniform3f(game.un_cp, 
-            game.cameraPos.x, 
-            game.cameraPos.y, 
-            game.cameraPos.z);
-
-        gl.uniform3f(game.un_cl, 
-            game.shipPos.x, 
-            game.shipPos.y, 
-            game.shipPos.z);
-
-        gl.uniform1f(this.un_ba, 
-            angle);
+        shader.uniformv("camera_pos", game.cameraPos);
+        shader.uniformv("ship_pos", game.shipPos);
+        shader.uniform1f("ship_angle", angle);
     }
 
     exit() {
