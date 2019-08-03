@@ -106,7 +106,7 @@ object getDist(vec3 p)
     
     float vp = (sin(time * 4.) + 1.0) * .3;
     float vr = (cos(time * 4.)) * .1;
-    float vv = (ship_angle - 1.0) * .1 * ship_sign * PI;
+    float vv = sin((ship_angle - 1.0) * .3) * .3 * ship_sign * PI;
     vec3 b = (p - ship_pos) + vec3(0.0, vp, 0.0);// * rotateY(ship_angle); 
     object ship = ship(b  * rotateY(PI * .5) * rotateZ(vr) *  rotateX(vv));
     
