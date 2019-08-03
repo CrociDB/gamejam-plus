@@ -79,7 +79,6 @@ class GameLevel {
         this.background = new Vec3(0.2, 0.5, 0.6);
 
         this.baseDepth = 0;
-        this.speed = .3;
         
         this.shipLanes = [
             new Vec3(-10, 2.2, 0),
@@ -92,7 +91,38 @@ class GameLevel {
         this.obstacles = [
             new Vec3(10, 5, 5),
             new Vec3(0, 5, 10),
-            new Vec3(-10, 5, 15) ];
+            new Vec3(-10, 5, 15),
+            new Vec3(10, 5, 5),
+            new Vec3(0, 5, 10),
+            new Vec3(-10, 5, 15),
+            new Vec3(10, 5, 5),
+            new Vec3(0, 5, 10),
+            new Vec3(-10, 5, 15), ];
+
+        this.obstaclesHeight = 5;
+        this.obstaclesWide = -1;
+        this.levelData = {
+            obsDepth: 200,
+            obsMinDist: 100,
+            obsMul: 400,
+            obsMax: 3,
+            speed: .6,
+        } 
+
+        this.generateObstacles();
+    }
+
+    generateObstacles() {
+        for (let i = 0; i < this.obstacles.length; i++) {
+            this.obstacles[i] = this.generateSingleObstacle(true);
+        }
+    }
+    
+    generateSingleObstacle(d) {
+        let lane = Math.ceil(Math.random() * 3) - 2;
+        let r = d ? Math.round(this.levelData.obsDepth / this.levelData.obsMul) : Math.round(this.levelData.obsMinDist / this.levelData.obsMul)
+        let dist = 150 + Math.random() * r * this.levelData.obsMul;
+        return new Vec3(this.obstaclesWide + lane * 10, this.obstaclesHeight, dist);
     }
 
     update() {
@@ -122,7 +152,7 @@ class GameLevel {
 
         game.cameraPos = game.cameraPos.add(Vec3.up.muls(game.dist - 5));
 
-        this.baseDepth -= this.speed;
+        this.baseDepth -= this.levelData.speed;
         
         // Send Uniforms
         shader.uniformv("camera_pos", game.cameraPos);
@@ -134,6 +164,11 @@ class GameLevel {
         shader.uniform1f("base_depth", this.baseDepth);
         
         for (let i = 0; i < this.obstacles.length; i++) {
+            this.obstacles[i].z -= this.levelData.speed;
+            if (this.obstacles[i].z <= -10) {
+                this.obstacles[i] = this.generateSingleObstacle(false);
+            };
+
             shader.uniformv("obstacle" + (i + 1), this.obstacles[i]);
         }
     }

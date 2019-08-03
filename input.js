@@ -1,6 +1,6 @@
 // Input manager
 
-const BLINK_THRESHOLD = 250;
+const BLINK_THRESHOLD = 200;
 
 class Input {
     constructor(canvas) {

@@ -11,7 +11,7 @@ uniform float time;
 uniform float aspectRatio;
 
 #define MAX_STEPS 250
-#define MAX_DIST 90.0
+#define MAX_DIST 110.0
 #define SURF_DIST .004
 
 uniform vec3 camera_pos;
@@ -23,6 +23,12 @@ uniform float ship_sign;
 uniform vec3 obstacle1;
 uniform vec3 obstacle2;
 uniform vec3 obstacle3;
+uniform vec3 obstacle4;
+uniform vec3 obstacle5;
+uniform vec3 obstacle6;
+uniform vec3 obstacle7;
+uniform vec3 obstacle8;
+uniform vec3 obstacle9;
 
 uniform vec3 background;
 
@@ -98,11 +104,19 @@ object getDist(vec3 p)
     object ofloor = ofloor(p);
 
     const float s = .7;
-    float obs1 = obstacle((p - obstacle1 - d) * rotateY(time * 2.0));
-    float obs2 = obstacle((p - obstacle2 - d) * rotateY(time * 2.0));
-    float obs3 = obstacle((p - obstacle3 - d) * rotateY(time * 2.0));
+    float obs1 = obstacle((p - obstacle1) * rotateY(time * 2.0));
+    float obs2 = obstacle((p - obstacle2) * rotateY(time * 2.0));
+    float obs3 = obstacle((p - obstacle3) * rotateY(time * 2.0));
+    float obs4 = obstacle((p - obstacle4) * rotateY(time * 2.0));
+    float obs5 = obstacle((p - obstacle5) * rotateY(time * 2.0));
+    float obs6 = obstacle((p - obstacle6) * rotateY(time * 2.0));
+    float obs7 = obstacle((p - obstacle7) * rotateY(time * 2.0));
+    float obs8 = obstacle((p - obstacle8) * rotateY(time * 2.0));
+    float obs9 = obstacle((p - obstacle9) * rotateY(time * 2.0));
 
     ofloor.d = opSmoothUnion(opSmoothUnion(opSmoothUnion(obs1, obs2, s), obs3, s), ofloor.d, s);
+    ofloor.d = opSmoothUnion(opSmoothUnion(opSmoothUnion(obs4, obs5, s), obs6, s), ofloor.d, s);
+    ofloor.d = opSmoothUnion(opSmoothUnion(opSmoothUnion(obs7, obs8, s), obs9, s), ofloor.d, s);
     
     float vp = (sin(time * 4.) + 1.0) * .3;
     float vr = (cos(time * 4.)) * .1;
@@ -303,7 +317,7 @@ vec3 render(object o, vec3 p, vec3 ro, vec3 rd, vec2 suv)
         vec3 ref = vec3(0.0);
         if (_o.d < MAX_DIST) ref = render_wall(_o, _p, r, _normal);
         
-        t += ref * .35;
+        t += ref * .15;
         
         float ao = ambientOcclusion(p, normal);
         
