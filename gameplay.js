@@ -71,12 +71,33 @@ class ShipMovement {
     }
 }
 
+class Dead {
+    enter(manager) {
+        this.manager = manager;
+        console.dir(this);
+        let dialog = this.manager.game.manager.params.dialog;
+        dialog.show("Oh, no. BAD THOUGHTS!", () => {
+            manager.setState(new GameLevel());
+            console.log("TEST");
+        }, null);
+    }
+
+    update() {
+
+    }
+
+    exit() {
+
+    }
+}
+
 // Main gameplay
 class GameLevel {
     enter(manager) {
         this.manager = manager;
 
-        this.background = new Vec3(0.2, 0.5, 0.6);
+        this.dead = false;
+        this.fade = -2;
 
         this.baseDepth = 0;
         
@@ -99,7 +120,6 @@ class GameLevel {
             new Vec3(0, 5, 10),
             new Vec3(-10, 5, 15), ];
 
-        this.obstaclesHeight = 5;
         this.obstaclesWide = -1;
         this.levelData = {
             obsDepth: 200,
@@ -107,8 +127,9 @@ class GameLevel {
             obsMul: 400,
             obsMax: 3,
             speed: .6,
+            background: new Vec3(0.2, 0.5, 0.6)
         } 
-
+        
         this.generateObstacles();
     }
 
@@ -122,7 +143,8 @@ class GameLevel {
         let lane = Math.ceil(Math.random() * 3) - 2;
         let r = d ? Math.round(this.levelData.obsDepth / this.levelData.obsMul) : Math.round(this.levelData.obsMinDist / this.levelData.obsMul)
         let dist = 150 + Math.random() * r * this.levelData.obsMul;
-        return new Vec3(this.obstaclesWide + lane * 10, this.obstaclesHeight, dist);
+        //return new Vec3(0, 0, 0);
+        return new Vec3(this.obstaclesWide + lane * 10, 0, dist);
     }
 
     update() {
@@ -143,31 +165,54 @@ class GameLevel {
         let sidedir = dir.cross(Vec3.up);
 
         this.ship.update();
-        if (input.blink == 1) {
-            this.ship.moveLeft();
-        } else if (input.blink == 2) {
-            this.ship.moveRight();
+        this.countdown -= 0.2;
+        if (!this.dead && this.fade > 0.9) {
+            if (input.blink == 1) {
+                this.ship.moveLeft();
+            } else if (input.blink == 2) {
+                this.ship.moveRight();
+            }
+            game.shipPos = this.ship.pos;
         }
-        game.shipPos = this.ship.pos;
 
         game.cameraPos = game.cameraPos.add(Vec3.up.muls(game.dist - 5));
 
         this.baseDepth -= this.levelData.speed;
+
+        if (this.dead) {
+            this.fade -= .2;
+            if (this.fade <= 0) {
+                this.manager.setState(new Dead());
+            }
+        } else {
+            this.fade = Math.min(this.fade + .1, 1.0);
+        }
         
         // Send Uniforms
         shader.uniformv("camera_pos", game.cameraPos);
         shader.uniformv("ship_pos", game.shipPos);
         shader.uniformv("ship_initial_pos", this.shipLanes[1]);
-        shader.uniformv("background", this.background);
+        shader.uniformv("background", this.levelData.background);
         shader.uniform1f("ship_angle", this.ship.mov);
         shader.uniform1f("ship_sign", this.ship.sign);
         shader.uniform1f("base_depth", this.baseDepth);
+        shader.uniform1f("base_depth", this.baseDepth);
+        shader.uniform1f("colorFade", this.fade);
         
         for (let i = 0; i < this.obstacles.length; i++) {
-            this.obstacles[i].z -= this.levelData.speed;
-            if (this.obstacles[i].z <= -10) {
-                this.obstacles[i] = this.generateSingleObstacle(false);
-            };
+            if (!this.dead)
+            {
+                this.obstacles[i].z -= this.levelData.speed;
+                let t = Math.min(1.0 - (this.obstacles[i].z - 50) / 90, 1);
+                this.obstacles[i].y = (1 - t) * -5 + t * 5
+                if (this.obstacles[i].z <= -10) {
+                    this.obstacles[i] = this.generateSingleObstacle(false);
+                };
+
+                if (Vec3.distance(this.ship.pos, this.obstacles[i]) < 5) {
+                    this.dead = true;
+                }
+            }
 
             shader.uniformv("obstacle" + (i + 1), this.obstacles[i]);
         }

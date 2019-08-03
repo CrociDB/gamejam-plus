@@ -14,6 +14,7 @@ uniform float aspectRatio;
 #define MAX_DIST 110.0
 #define SURF_DIST .004
 
+uniform float colorFade;
 uniform vec3 camera_pos;
 uniform vec3 ship_pos;
 uniform vec3 ship_initial_pos;
@@ -103,7 +104,7 @@ object getDist(vec3 p)
     vec3 d = vec3(0, 0, base_depth);
     object ofloor = ofloor(p);
 
-    const float s = .7;
+    const float s = .9;
     float obs1 = obstacle((p - obstacle1) * rotateY(time * 2.0));
     float obs2 = obstacle((p - obstacle2) * rotateY(time * 2.0));
     float obs3 = obstacle((p - obstacle3) * rotateY(time * 2.0));
@@ -375,5 +376,5 @@ void main()
 {
     vec2 uv = out_uv * vec2(aspectRatio, 1.0);
 
-    outColor = color(uv);
+    outColor = color(uv) * colorFade;
 }

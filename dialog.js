@@ -44,6 +44,7 @@ class Dialog {
 
     close(callback) {
         this.dialogElement.classList.add("hidden");
+        this.active = false;
         callback();
     }
 

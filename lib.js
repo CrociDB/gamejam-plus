@@ -102,6 +102,8 @@ Vec3.lerp = (a, b, t) => new Vec3(
     lerp(a.y, b.y, t),
     lerp(a.z, b.z, t));
 
+Vec3.distance = (a, b) => Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y) + (a.z - b.z) * (a.z - b.z));
+
 Vec3.right = new Vec3(1, 0, 0);
 Vec3.up = new Vec3(0, 1, 0);
 Vec3.forward = new Vec3(0, 0, 1);
