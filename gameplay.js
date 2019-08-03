@@ -6,7 +6,7 @@ class GameplayState {
         this.dist = 12;
 
         this.cameraPos = new Vec3(-5, 10, -20);
-        this.shipPos = new Vec3(0, 2.6, 0);
+        this.shipPos = new Vec3(0, 2.2, 0);
 
         let shader = this.manager.params.shader;
         let shaderCodes = this.manager.params.shaderCodes;
@@ -30,13 +30,15 @@ class GameLevel {
     enter(manager) {
         this.manager = manager;
 
+        this.background = new Vec3(0.2, 0.5, 0.6);
+
         this.baseDepth = 0;
         this.speed = .3;
         
         this.shipLanes = [
-            new Vec3(-10, 2.6, 0),
-            new Vec3(0, 2.6, 0),
-            new Vec3(10, 2.6, 0),
+            new Vec3(-10, 2.2, 0),
+            new Vec3(0, 2.2, 0),
+            new Vec3(10, 2.2, 0),
         ];
 
         this.obstacles = [
@@ -76,6 +78,7 @@ class GameLevel {
         // Send Uniforms
         shader.uniformv("camera_pos", game.cameraPos);
         shader.uniformv("ship_pos", game.shipPos);
+        shader.uniformv("background", this.background);
         shader.uniform1f("ship_angle", angle);
         shader.uniform1f("base_depth", this.baseDepth);
         

@@ -22,6 +22,8 @@ uniform vec3 obstacle1;
 uniform vec3 obstacle2;
 uniform vec3 obstacle3;
 
+uniform vec3 background;
+
 uniform float base_depth;
 
 const vec3 corner_pos = vec3(-14.1, -2.0, -1.);
@@ -269,11 +271,13 @@ vec3 render(object o, vec3 p, vec3 ro, vec3 rd, vec2 suv)
     
     vec3 color = vec3(0.0);
     float vl = 1.0;
+
+    vec3 back = background * (1.0 - min(1.0, distance(suv, vec2(0.9, 0.5))));
     
     if (o.id == OBJ_EMPTY || o.d > MAX_DIST)
     {
         vl = 0.1;
-        color = vec3(0.4) + mix(vec3(0.0, 0.2, 0.0), vec3(0.2, 0.5, 0.6), clamp(suv.y * 5.0 - 1.5, 0.0, 1.0));
+        color = back;
     }
     else if (o.id == OBJ_FLOOR)
     {
@@ -316,6 +320,10 @@ vec3 render(object o, vec3 p, vec3 ro, vec3 rd, vec2 suv)
         float ao = ambientOcclusion(p, normal);
         color = (ao * t * .5) + (t * l.r * shadow) + (l.g * .2 * shadow);
     }
+
+    float dist = min(pow(o.d, 1.8) * 0.0005, 1.0);
+
+    color = mix(color, back, dist);
     
     return color;
 }		
@@ -325,7 +333,7 @@ vec3 render(object o, vec3 p, vec3 ro, vec3 rd, vec2 suv)
 vec4 color(vec2 uv)
 {
     vec3 ro = camera_pos;
-    
+
 	vec3 rd = normalize(vec3(uv.x - 0.90, uv.y - 0.3, 1.0));
     
     rd = (viewMatrix(ship_pos, ro, vec_up) * vec4(rd, 1.0)).xyz;
