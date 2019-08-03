@@ -9,6 +9,7 @@ out vec4 outColor;
 
 uniform float time;
 uniform float aspectRatio;
+uniform float colorFade;
 
 #define MAX_STEPS 250
 #define MAX_DIST 90.0
@@ -321,5 +322,5 @@ void main()
 {
     vec2 uv = out_uv * vec2(aspectRatio, 1.0);
 
-    outColor = color(uv);
+    outColor = color(uv) * colorFade;
 }

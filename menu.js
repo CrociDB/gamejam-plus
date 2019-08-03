@@ -16,11 +16,30 @@ class MenuState {
         dialog.show("Press SPACE to start", () => {
             dialog.show("Okay. Let's go.", this.startGame.bind(this), null);
         }, null);
+
+        let that = this;
+        co(function*() {
+            let col = 0.0;
+            while (col < 1.0) {
+                col += .05;
+                shader.uniform1f("colorFade", col);
+                yield .01;
+            }
+            shader.uniform1f("colorFade", 1.0);
+        });
     }
 
     startGame() {
+        let shader = this.manager.params.shader;
         let that = this;
         co(function*() {
+            let col = 1.0;
+            while (col > 0.0) {
+                col -= .08;
+                shader.uniform1f("colorFade", col);
+                yield .01;
+            }
+            shader.uniform1f("colorFade", 0.0);
             yield 1;
             that.manager.setState(new GameplayState());
         });
