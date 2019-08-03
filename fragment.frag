@@ -324,7 +324,7 @@ vec3 render(object o, vec3 p, vec3 ro, vec3 rd, vec2 suv)
         color = (ao * t * .5) + (t * l.r * shadow) + (l.g * .2 * shadow);
     }
 
-    float dist = min(pow(o.d, 1.8) * 0.0005, 1.0);
+    float dist = min(pow(o.d, 0.85) * 0.02, 1.0);
 
     color = mix(color, back, dist);
     
