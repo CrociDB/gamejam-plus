@@ -84,7 +84,7 @@ object ship(vec3 p)
     float cap = sdCapsule(p, vec3(3.0, 1.0, 1.0), vec3(1.0), 0.6);
     float cockpit = sdSphere(p - vec3(2.5, 1.3, 1.0), .5);
     float back = sdCapsule(p, vec3(1.0, 1.0, 1.0), vec3(1.0), 0.9);
-    float wings = sdBox(p - vec3(2.0, 0.8, 1.0), vec3(1.0, 0.1, 2.0));
+    float wings = sdBox(p - vec3(2.0, 0.8, 1.0), vec3(0.7, 0.1, 1.5));
     float wings2 = sdBox(p - vec3(1.5, 0.8, 1.0), vec3(0.4, 0.1, 3.0));
     float backHole = sdCapsule(p + vec3(0.8, 0.0, 0.0), vec3(1.0, 1.0, 1.0), vec3(1.0), 0.8);
 
@@ -241,19 +241,10 @@ vec3 texture_ship(vec2 uv)
     uv.x *= .8;
     
     float no = noise(vec2(1.2, 2.4) + uv * 6.);
-
-    float n0 = .6 + .4 * smoothstep(
-        .24,
-        0.55,
-        fbm(vec2(uv.x * 10., uv.y * 30.) + vec2(15.0, 10.0)));
     uv += no;
     float n1 = fbm(vec2(uv.x * 5., uv.y * 20.) + vec2(2.0, 2.0));
-    float n2 = smoothstep(
-        1.0,
-        0.3,
-        fbm(vec2(uv.x * 1., uv.y * 10.)));
     
-    vec3 col = n0 * n1 * n2 * vec3(0.82, 0.48, 0.28);
+    vec3 col = n1 * vec3(0.5, 0.5, 0.6);
     return col;
 }
 
@@ -308,7 +299,6 @@ vec3 render(object o, vec3 p, vec3 ro, vec3 rd, vec2 suv)
         float spec_map = clamp(smoothstep(0.43, 0.52, fbm(uv * 20.0)), 0.0, 1.0);
         vec3 spec = spec_map * l.g * .000002 * t * .2 * shadow;
         
-        
         // Reflection
         vec3 r = reflect(rd, normal);
         vec3 _or = p + normal * SURF_DIST * 2.0;
@@ -336,6 +326,7 @@ vec3 render(object o, vec3 p, vec3 ro, vec3 rd, vec2 suv)
         vec2 uv = fract(triplanar_map(p * rotateY(ship_angle), ship_pos * rotateY(ship_angle), normal) * 0.1 + 0.5);
         vec3 t = texture_ship(uv);
         float ao = ambientOcclusion(p, normal);
+        ao *= ao;
         color = (ao * t * .5) + (t * l.r * shadow) + (l.g * .2 * shadow);
     }
 

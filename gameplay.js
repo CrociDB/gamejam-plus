@@ -229,7 +229,7 @@ class GameLevel {
             {
                 if (i < this.levelData.obsMax) {
                     this.obstacles[i].z -= this.levelData.speed;
-                    let t = Math.min(1.0 - (this.obstacles[i].z - 50) / 90, 1);
+                    let t = Math.min(1.0 - (this.obstacles[i].z - 30) / 90, 1);
                     this.obstacles[i].y = (1 - t) * -5 + t * 5
                     if (this.obstacles[i].z <= -10 && this.finished == 0) {
                         this.obstacles[i] = this.generateSingleObstacle(false);

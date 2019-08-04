@@ -101,5 +101,53 @@ const LEVELS = [
         speed: .6,
         distort: .17,
         background: new Vec3(0.36, 0.0, 0.05)
+    },
+    {
+        entry: [
+            "Why do these bad thoughts keep coming?",
+            "It's getting harder to dodge."],
+        death: [
+            "NO! I'm being consumed by those spikey thoughts!",
+            "Avoid it!"
+        ],
+        obsDepth: 300,
+        obsMinDist: 150,
+        obsMul: 400,
+        obsMax: 5,
+        dist: 550,
+        speed: .6,
+        distort: .17,
+        background: new Vec3(0.36, 0.0, 0.05)
+    },
+    {
+        entry: [
+            "Maybe it's just a dream.",
+            "But I still can't remember who am I."],
+        death: [
+            "NO! I'm being consumed by those spikey thoughts!",
+            "Avoid it!"
+        ],
+        obsDepth: 300,
+        obsMinDist: 150,
+        obsMul: 400,
+        obsMax: 5,
+        dist: 600,
+        speed: .7,
+        distort: .17,
+        background: new Vec3(0.36, 0.0, 0.05)
+    },
+    {
+        entry: [
+            "That was it.",
+            "Thank you for playing.",
+            "A game by Bruno 'CrociDB' Croci."],
+        obsDepth: 250,
+        obsMinDist: 150,
+        obsMul: 400,
+        obsMax: 0,
+        dist: 500,
+        speed: 0.9,
+        distort: .2,
+        background: new Vec3(0.2, 0.3, 0.5)
     }
 ];
