@@ -377,9 +377,9 @@ void main()
 {
     vec2 uv = out_uv * vec2(aspectRatio, 1.0);
 
-    float v = time * .2;
-    vec2 scrollingUv = uv + vec2(v, v * .2);
-    uv += noise(scrollingUv * 5.0) * (min(1.0, distance(uv, vec2(0.9, 0.5))) * 2.0) * distort;
+    float v = time * .4;
+    vec2 scrollingUv = uv + vec2(v * .2, v);
+    uv += (noise(scrollingUv * 3.0) - .5) * distort;
 
     outColor = color(uv) * colorFade;
 

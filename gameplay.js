@@ -71,14 +71,32 @@ class ShipMovement {
     }
 }
 
+class Entry {
+    enter(manager) {
+        this.manager = manager;
+        console.dir(this);
+        let dialog = this.manager.game.manager.params.dialog;
+        dialog.showList(["Oh, no. BAD THOUGHTS!", "I need to dodge those things!"], () => {
+            manager.setState(new GameLevel());
+        }, null);
+    }
+
+    update() {
+
+    }
+
+    exit() {
+
+    }
+}
+
 class Dead {
     enter(manager) {
         this.manager = manager;
         console.dir(this);
         let dialog = this.manager.game.manager.params.dialog;
-        dialog.show("Oh, no. BAD THOUGHTS!", () => {
+        dialog.showList(["Oh, no. BAD THOUGHTS!", "I need to dodge those things!"], () => {
             manager.setState(new GameLevel());
-            console.log("TEST");
         }, null);
     }
 

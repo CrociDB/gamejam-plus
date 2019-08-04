@@ -9,7 +9,19 @@ class Dialog {
         this.finished = false;
     }
 
-    show(message, oneblink, twoblink) {
+    showList(messages, oneblink, twoblink) {
+        this.list = messages;
+        this.currentInList = 0;
+
+        this.oneblink = oneblink;
+        this.twoblink = twoblink;
+
+        console.dir(this.oneblink, this.twoblink);
+
+        this._show(messages[this.currentInList]);
+    }
+
+    _show(message) {
         this.dialogElement.classList.remove("hidden");
 
         this.inputItem.style.opacity = "0.0";
@@ -37,9 +49,15 @@ class Dialog {
             that.finished = true;
         });
         
+        this.active = true;
+    }
+    
+    show(message, oneblink, twoblink) {
         this.oneblink = oneblink;
         this.twoblink = twoblink;
-        this.active = true;
+        this.list = null;
+        this.currentInList = -1;
+        this._show(message);
     }
 
     close(callback) {
@@ -50,14 +68,23 @@ class Dialog {
 
     setBlink(blink) {
         if (this.active && this.finished) {
-            if (blink == 1) {
-                if (this.oneblink != null) {
-                    this.close(this.oneblink);
+            if (this.list != null && this.currentInList > -1 && this.currentInList < this.list.length - 1) {
+                console.log("ANY MORE?")
+                if (blink > 0)
+                {
+                    this.currentInList++;
+                    this._show(this.list[this.currentInList]);
                 }
-            } else if (blink == 2) {
-                if (this.twoblink != null) {
-                    this.close(this.twoblink);
-                }   
+            } else {
+                if (blink == 1) {
+                    if (this.oneblink != null) {
+                        this.close(this.oneblink);
+                    }
+                } else if (blink == 2) {
+                    if (this.twoblink != null) {
+                        this.close(this.twoblink);
+                    }   
+                }
             }
         }
     }
