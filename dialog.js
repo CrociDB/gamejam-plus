@@ -62,16 +62,23 @@ class Dialog {
 
     close(callback) {
         this.dialogElement.classList.add("hidden");
-        this.active = false;
         callback();
+        this.finished = false;
+        console.log("CLosed");
     }
 
     setBlink(blink) {
         if (this.active && this.finished) {
+            if (blink > 0) {
+                console.dir(this.list);
+                console.dir(this.currentInList);
+            }
+            
             if (this.list != null && this.currentInList > -1 && this.currentInList < this.list.length - 1) {
                 if (blink > 0)
                 {
                     this.currentInList++;
+                    this.finished = false;
                     this._show(this.list[this.currentInList]);
                 }
             } else {

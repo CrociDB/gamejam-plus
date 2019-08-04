@@ -13,9 +13,7 @@ class MenuState {
         shader.setShaders(shaderCodes.mainVertex, shaderCodes.menuFragmentCode);
 
         let dialog = this.manager.params.dialog;
-        dialog.show("Press SPACE to start", () => {
-            dialog.show("Okay. Let's go.", this.startGame.bind(this), null);
-        }, null);
+        dialog.showList(["Press SPACE to start", "Let's dive in."], this.startGame.bind(this), null);
 
         this.manager.params.title.classList.remove("hidden");
 

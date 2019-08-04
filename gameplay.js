@@ -95,9 +95,10 @@ class Dead {
     enter(manager) {
         this.manager = manager;
         console.dir(this);
+        let levelData = LEVELS[this.manager.game.currentLevel];
         let dialog = this.manager.game.manager.params.dialog;
-        dialog.showList(["Oh, no. BAD THOUGHTS!", "I need to dodge those things!"], () => {
-            manager.setState(new GameLevel());
+        dialog.showList(levelData.death, () => {
+            manager.setState(new Entry());
         }, null);
     }
 
@@ -209,7 +210,7 @@ class GameLevel {
                 }
             }
         } else {
-            this.fade = Math.min(this.fade + .1, 1.0);
+            this.fade = Math.min(this.fade + .026, 1.0);
         }
         
         // Send Uniforms
