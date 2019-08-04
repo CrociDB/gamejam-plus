@@ -45,6 +45,7 @@ class Shader {
 
         this.program = createProgram(gl, vsh, fsh);
         this.uniforms = {};
+        this.use();
     }
 
     use() {
@@ -126,17 +127,18 @@ function initWebGL()
         gl.clearColor(0, 0, 0, 0);
         gl.clear(gl.COLOR_BUFFER_BIT);
 
-        shader.use();
-
+        
         gl.enableVertexAttribArray(0);
         gl.enableVertexAttribArray(1);
-
+        
         gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
         gl.vertexAttribPointer(0, 
             3, gl.FLOAT, false, 5 * 4, 0);
             
         gl.vertexAttribPointer(1, 
             2, gl.FLOAT, false, 5 * 4, 3 * 4);
+                
+        shader.use();
 
         stateManager.update();
         stateManager.time = timestamp;

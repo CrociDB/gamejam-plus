@@ -69,7 +69,6 @@ class Dialog {
     setBlink(blink) {
         if (this.active && this.finished) {
             if (this.list != null && this.currentInList > -1 && this.currentInList < this.list.length - 1) {
-                console.log("ANY MORE?")
                 if (blink > 0)
                 {
                     this.currentInList++;

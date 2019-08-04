@@ -21,6 +21,8 @@ uniform vec3 ship_initial_pos;
 uniform float ship_angle;
 uniform float ship_sign;
 uniform float distort;
+uniform vec3 background;
+uniform float base_depth;
 
 uniform vec3 obstacle1;
 uniform vec3 obstacle2;
@@ -32,9 +34,6 @@ uniform vec3 obstacle7;
 uniform vec3 obstacle8;
 uniform vec3 obstacle9;
 
-uniform vec3 background;
-
-uniform float base_depth;
 
 const vec3 corner_pos = vec3(-14.1, -2.0, -1.);
 vec3 light_pos = vec3(13.5, 20.5, 8.0);

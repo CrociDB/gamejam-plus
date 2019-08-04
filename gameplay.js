@@ -7,6 +7,7 @@ class GameplayState {
 
         this.cameraPos = new Vec3(-5, 10, -20);
         this.shipPos = new Vec3(0, 2.2, 0);
+        this.currentLevel = 0;
 
         let shader = this.manager.params.shader;
         let shaderCodes = this.manager.params.shaderCodes;
@@ -76,13 +77,13 @@ class Entry {
         this.manager = manager;
         console.dir(this);
         let dialog = this.manager.game.manager.params.dialog;
-        dialog.showList(["Oh, no. BAD THOUGHTS!", "I need to dodge those things!"], () => {
+        let levelData = LEVELS[this.manager.game.currentLevel];
+        dialog.showList(levelData.entry, () => {
             manager.setState(new GameLevel());
         }, null);
     }
 
     update() {
-
     }
 
     exit() {
@@ -114,7 +115,7 @@ class GameLevel {
     enter(manager) {
         this.manager = manager;
 
-        this.dead = false;
+        this.finished = 0;
         this.fade = -2;
 
         this.baseDepth = 0;
@@ -139,15 +140,7 @@ class GameLevel {
             new Vec3(-10, 5, 15), ];
 
         this.obstaclesWide = -1;
-        this.levelData = {
-            obsDepth: 200,
-            obsMinDist: 100,
-            obsMul: 400,
-            obsMax: 3,
-            speed: .6,
-            distort: .1,
-            background: new Vec3(0.2, 0.5, 0.6)
-        } 
+        this.levelData = LEVELS[this.manager.game.currentLevel];
         
         this.generateObstacles();
     }
@@ -185,7 +178,7 @@ class GameLevel {
 
         this.ship.update();
         this.countdown -= 0.2;
-        if (!this.dead && this.fade > 0.9) {
+        if (this.finished == 0 && this.fade > 0.9) {
             if (input.blink == 1) {
                 this.ship.moveLeft();
             } else if (input.blink == 2) {
@@ -197,11 +190,19 @@ class GameLevel {
         game.cameraPos = game.cameraPos.add(Vec3.up.muls(game.dist - 5));
 
         this.baseDepth -= this.levelData.speed;
+        if(Math.abs(this.baseDepth) >= this.levelData.dist) {
+            this.finished = 2;
+        }
 
-        if (this.dead) {
-            this.fade -= .2;
+        if (this.finished > 0) {
+            this.fade -= this.finished == 2 ? .015 : .2;
             if (this.fade <= 0) {
-                this.manager.setState(new Dead());
+                if (this.finished == 1) {
+                    this.manager.setState(new Dead());
+                } else {
+                    this.manager.game.currentLevel++;
+                    this.manager.setState(new Entry());
+                }
             }
         } else {
             this.fade = Math.min(this.fade + .1, 1.0);
@@ -215,12 +216,11 @@ class GameLevel {
         shader.uniform1f("ship_angle", this.ship.mov);
         shader.uniform1f("ship_sign", this.ship.sign);
         shader.uniform1f("base_depth", this.baseDepth);
-        shader.uniform1f("base_depth", this.baseDepth);
         shader.uniform1f("colorFade", this.fade);
         shader.uniform1f("distort", this.levelData.distort);
         
         for (let i = 0; i < this.obstacles.length; i++) {
-            if (!this.dead)
+            if (this.finished == 0)
             {
                 this.obstacles[i].z -= this.levelData.speed;
                 let t = Math.min(1.0 - (this.obstacles[i].z - 50) / 90, 1);
@@ -230,7 +230,7 @@ class GameLevel {
                 };
 
                 if (Vec3.distance(this.ship.pos, this.obstacles[i]) < 5) {
-                    this.dead = true;
+                    this.finished = 1;
                 }
             }
 
