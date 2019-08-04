@@ -17,6 +17,8 @@ class MenuState {
             dialog.show("Okay. Let's go.", this.startGame.bind(this), null);
         }, null);
 
+        this.manager.params.title.classList.remove("hidden");
+
         let that = this;
         co(function*() {
             let col = 0.0;
@@ -39,6 +41,7 @@ class MenuState {
                 shader.uniform1f("colorFade", col);
                 yield .01;
             }
+            that.manager.params.title.classList.add("hidden");
             shader.uniform1f("colorFade", 0.0);
             yield 1;
             that.manager.setState(new GameplayState());

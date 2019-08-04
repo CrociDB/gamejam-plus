@@ -203,6 +203,8 @@ class GameLevel {
                     if (this.manager.game.currentLevel < LEVELS.length - 1) {
                         this.manager.game.currentLevel++;
                         this.manager.setState(new Entry());
+                    } else {
+                        game.manager.setState(new MenuState());
                     }
                 }
             }

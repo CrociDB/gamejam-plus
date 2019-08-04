@@ -9,15 +9,31 @@ out vec4 outColor;
 
 uniform float time;
 uniform float aspectRatio;
-uniform float colorFade;
 
 #define MAX_STEPS 250
-#define MAX_DIST 90.0
+#define MAX_DIST 110.0
 #define SURF_DIST .004
 
 uniform vec3 camera_pos;
 uniform vec3 ship_pos;
+uniform vec3 ship_initial_pos;
 uniform float ship_angle;
+uniform float ship_sign;
+uniform float colorFade;
+float distort = .1;
+uniform float base_depth;
+vec3 background;
+
+uniform vec3 obstacle1;
+uniform vec3 obstacle2;
+uniform vec3 obstacle3;
+uniform vec3 obstacle4;
+uniform vec3 obstacle5;
+uniform vec3 obstacle6;
+uniform vec3 obstacle7;
+uniform vec3 obstacle8;
+uniform vec3 obstacle9;
+
 
 const vec3 corner_pos = vec3(-14.1, -2.0, -1.);
 vec3 light_pos = vec3(13.5, 20.5, 8.0);
@@ -29,7 +45,7 @@ const vec3 vec_forward = vec3(0.0, 0.0, 1.0);
 #define OBJ_EMPTY 0
 #define OBJ_WALL 2
 #define OBJ_FLOOR 4
-#define OBJ_WOOD 3
+#define OBJ_SHIP 3
 
 struct object
 {
@@ -53,35 +69,53 @@ object wall(vec3 p)
     float front = opSmoothSubtraction(h, f, 0.5);
     
     float side = sdBox(p + vec3(15.0, 0.0, 7.5), vec3(0.8, 15.42, 6.8));
-
     
     return object(min(side, front), OBJ_WALL);
 }
 
 object ofloor(vec3 p)
 {
-    float f = sdBox(p, vec3(60.0, 1.0, 60.0));
+    float f = sdBox(p - vec3(-2.5, 0.0, 30.0), vec3(20.0, 1.0, 60.0));
     return object(f, OBJ_FLOOR);
 }
 
-object wood(vec3 p)
+object ship(vec3 p)
 {
-    float final = sdBox(p, vec3(2.0, 2.0, 2.0));
+    float cap = sdCapsule(p, vec3(3.0, 1.0, 1.0), vec3(1.0), 0.6);
+    float cockpit = sdSphere(p - vec3(2.5, 1.3, 1.0), .5);
+    float back = sdCapsule(p, vec3(1.0, 1.0, 1.0), vec3(1.0), 0.9);
+    float wings = sdBox(p - vec3(2.0, 0.8, 1.0), vec3(1.0, 0.1, 2.0));
+    float wings2 = sdBox(p - vec3(1.5, 0.8, 1.0), vec3(0.4, 0.1, 3.0));
+    float backHole = sdCapsule(p + vec3(0.8, 0.0, 0.0), vec3(1.0, 1.0, 1.0), vec3(1.0), 0.8);
 
-    return object(final, OBJ_WOOD);
+    float f = opSmoothUnion(opSmoothUnion(opSmoothUnion(opSmoothUnion(cap, cockpit, .4), back, .4), wings, .6), wings2, .8);
+    f = opSmoothSubtraction(backHole, f, .2);
+
+    return object(f, OBJ_SHIP);
 }
 
-object getDist(vec3 p) 
-{
-    object ofloor = ofloor(p - vec3(0.0, 0.0, 0.0));
-    
-    vec3 b = (p - ship_pos) * rotateY(ship_angle); 
-    object wood = wood(b);
-    
-    return closest(wood, ofloor);
+float obstacle(vec3 p) {
+    float o = sdOctahedron(p, 3.0);
+    return o;
 }
 
-    
+object getDist(vec3 p)
+{
+    vec3 d = vec3(0, 0, base_depth);
+    object ofloor = ofloor(p);
+
+    const float s = 1.1;
+
+    vec3 obs = vec3(0.0, (sin(time * 2.0) + 1.0) * 2.0, 0.0);
+    float obs1 = obstacle((p - obs) * rotateY(time * 2.0));
+
+    vec3 obs3 = vec3(-8.0, (sin((time + 2.0) * 2.0) + 1.0) * 2.0, 0.0);
+    float obs4 = obstacle((p - obs3) * rotateY(time * 2.0));
+
+    ofloor.d = opSmoothUnion(obs1, opSmoothUnion(obs4, ofloor.d, s), s);
+    return ofloor;
+}
+
 object rayMarch(vec3 ro, vec3 rd)
 {
     object obj;
@@ -186,11 +220,11 @@ vec3 texture_floor(vec2 uv)
 {
     vec2 iuv = floor(uv * 10.0);
     float v = float(mod(iuv.x + iuv.y, 2.0) <= 0.01);
-    vec3 col = vec3(0.4 + 0.5 * v) * fbm(uv * 15.5) * vec3(0.75, 0.68, 0.591);
+    vec3 col = vec3(0.1 + 0.3 * v) * vec3(0.75, 0.68, 0.591);
     return col;
 }
 
-vec3 texture_wood(vec2 uv)
+vec3 texture_ship(vec2 uv)
 {
     uv.x *= .8;
     
@@ -243,15 +277,18 @@ vec3 render(object o, vec3 p, vec3 ro, vec3 rd, vec2 suv)
     
     vec3 color = vec3(0.0);
     float vl = 1.0;
+
+    vec3 back = background * (1.0 - min(1.0, distance(suv, vec2(0.9, 0.5))));
     
     if (o.id == OBJ_EMPTY || o.d > MAX_DIST)
     {
         vl = 0.1;
-        color = vec3(2.4) + mix(vec3(0.0, 0.2, 0.0), vec3(0.2, 0.5, 0.6), clamp(suv.y * 5.0 - 1.5, 0.0, 1.0));
+        color = back;
     }
     else if (o.id == OBJ_FLOOR)
     {
-        vec2 uv = triplanar_map(p, vec3(0.0, 0.0, 0.0), normal);
+        vec3 d = vec3(0, 0, base_depth);
+        vec2 uv = triplanar_map(p, d, normal);
         uv = fract(uv * 0.028 + 0.2);
         vec3 t = texture_floor(uv);
         
@@ -269,7 +306,7 @@ vec3 render(object o, vec3 p, vec3 ro, vec3 rd, vec2 suv)
         vec3 ref = vec3(0.0);
         if (_o.d < MAX_DIST) ref = render_wall(_o, _p, r, _normal);
         
-        t += ref * .35;
+        t += ref * .15;
         
         float ao = ambientOcclusion(p, normal);
         
@@ -279,16 +316,20 @@ vec3 render(object o, vec3 p, vec3 ro, vec3 rd, vec2 suv)
     {
         color = render_wall(o, p, rd, normal);
     }
-    else if (o.id == OBJ_WOOD)
+    else if (o.id == OBJ_SHIP)
     {
         vl = 0.2;
         
     	vec3 l = lighting(normal, rd, p, 4.0);
         vec2 uv = fract(triplanar_map(p * rotateY(ship_angle), ship_pos * rotateY(ship_angle), normal) * 0.1 + 0.5);
-        vec3 t = texture_wood(uv);
+        vec3 t = texture_ship(uv);
         float ao = ambientOcclusion(p, normal);
         color = (ao * t * .5) + (t * l.r * shadow) + (l.g * .2 * shadow);
     }
+
+    float dist = min(pow(o.d, 0.85) * 0.02, 1.0);
+
+    color = mix(color, back, dist);
     
     return color;
 }		
@@ -298,10 +339,11 @@ vec3 render(object o, vec3 p, vec3 ro, vec3 rd, vec2 suv)
 vec4 color(vec2 uv)
 {
     vec3 ro = camera_pos;
+
+	vec3 rd = normalize(vec3(uv.x - 0.90, uv.y - 0.3, 1.0));
     
-	vec3 rd = normalize(vec3(uv.x - 0.80, uv.y - 0.3, 1.0));
-    
-    rd = (viewMatrix(ship_pos, ro, vec_up) * vec4(rd, 1.0)).xyz;
+    vec3 pos = mix(ship_initial_pos, ship_pos, .2);
+    rd = (viewMatrix(pos, ro, vec_up) * vec4(rd, 1.0)).xyz;
     
     object o = rayMarch(ro, rd);
     vec3 p = ro + rd * o.d;
@@ -322,5 +364,13 @@ void main()
 {
     vec2 uv = out_uv * vec2(aspectRatio, 1.0);
 
+    float v = time * .4;
+    vec2 scrollingUv = uv + vec2(v * .2, v);
+    uv += (noise(scrollingUv * 3.0) - .5) * distort;
+
     outColor = color(uv) * colorFade;
+
+    vec2 guv = uv + noise(vec2(time)) + noise(vec2(uv));
+    float h = hash12(guv)*0.3+0.7;
+    outColor = outColor * mix(1.0, h, clamp(outColor.y, 0.7, 1.0));
 }

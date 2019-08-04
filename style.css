@@ -28,6 +28,26 @@ body {
     opacity: 0.0;
 }
 
+#game-title {
+    position: fixed;
+    left: 50%;
+    top: 320px;
+    transform: translate(-50%, 0%);
+
+    min-width: 750px;
+    max-width: 300px;
+    
+    margin: auto;
+
+    font-family: "Tahoma";
+    text-align: right;
+    font-size: 60px;
+    color: #96b0c2;
+    letter-spacing: 0.28em;
+    font-weight: bold;
+    text-shadow: 2px 2px #ff0000;
+}
+
 /* Dialog */
 #dialog {
     position: fixed;
@@ -53,6 +73,8 @@ body {
     text-transform: uppercase;
     letter-spacing: 0.16em;
     font-size: 22px;
+    text-shadow: 1px 1px #a81a1a;
+
 }
 
 #dialog .input {

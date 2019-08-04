@@ -14,15 +14,15 @@ uniform float aspectRatio;
 #define MAX_DIST 110.0
 #define SURF_DIST .004
 
-uniform float colorFade;
 uniform vec3 camera_pos;
 uniform vec3 ship_pos;
 uniform vec3 ship_initial_pos;
 uniform float ship_angle;
 uniform float ship_sign;
+uniform float colorFade;
 uniform float distort;
-uniform vec3 background;
 uniform float base_depth;
+uniform vec3 background;
 
 uniform vec3 obstacle1;
 uniform vec3 obstacle2;

@@ -114,13 +114,16 @@ function initWebGL()
     let input = new Input(canvas);
     let dialog = new Dialog("dialog");
 
+    let title = document.getElementById("game-title");
+
     let stateManager = new StateManager({
         gl: gl, 
         shader: shader, 
         shaderCodes: shaderCodes, 
         input: input,
-        dialog: dialog });
-    stateManager.setState(new GameplayState());
+        dialog: dialog,
+        title: title });
+    stateManager.setState(new MenuState());
 
     let loop = (timestamp) => {
         // Render
