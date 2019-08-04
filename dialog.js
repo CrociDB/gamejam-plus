@@ -9,7 +9,7 @@ class Dialog {
         this.finished = false;
     }
 
-    showList(messages, oneblink, twoblink) {
+    showList(messages, oneblink, twoblink, dead) {
         this.list = messages;
         this.currentInList = 0;
 
@@ -19,6 +19,12 @@ class Dialog {
         console.dir(this.oneblink, this.twoblink);
 
         this._show(messages[this.currentInList]);
+
+        if (!dead) {
+            this.dialogElement.style.backgroundColor = "#2F3439";
+        } else {
+            this.dialogElement.style.backgroundColor = "#592013";
+        }
     }
 
     _show(message) {
@@ -52,12 +58,18 @@ class Dialog {
         this.active = true;
     }
     
-    show(message, oneblink, twoblink) {
+    show(message, oneblink, twoblink, dead) {
         this.oneblink = oneblink;
         this.twoblink = twoblink;
         this.list = null;
         this.currentInList = -1;
         this._show(message);
+
+        if (!dead) {
+            this.dialogElement.style.backgroundColor = "#2F3439";
+        } else {
+            this.dialogElement.style.backgroundColor = "#592013";
+        }
     }
 
     close(callback) {

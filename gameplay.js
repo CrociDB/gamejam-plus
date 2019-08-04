@@ -99,7 +99,7 @@ class Dead {
         let dialog = this.manager.game.manager.params.dialog;
         dialog.showList(levelData.death, () => {
             manager.setState(new Entry());
-        }, null);
+        }, null, true);
     }
 
     update() {
