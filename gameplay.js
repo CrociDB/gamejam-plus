@@ -127,6 +127,7 @@ class GameLevel {
             obsMul: 400,
             obsMax: 3,
             speed: .6,
+            distort: .1,
             background: new Vec3(0.2, 0.5, 0.6)
         } 
         
@@ -198,6 +199,7 @@ class GameLevel {
         shader.uniform1f("base_depth", this.baseDepth);
         shader.uniform1f("base_depth", this.baseDepth);
         shader.uniform1f("colorFade", this.fade);
+        shader.uniform1f("distort", this.levelData.distort);
         
         for (let i = 0; i < this.obstacles.length; i++) {
             if (!this.dead)

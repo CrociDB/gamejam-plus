@@ -20,6 +20,7 @@ uniform vec3 ship_pos;
 uniform vec3 ship_initial_pos;
 uniform float ship_angle;
 uniform float ship_sign;
+uniform float distort;
 
 uniform vec3 obstacle1;
 uniform vec3 obstacle2;
@@ -376,5 +377,13 @@ void main()
 {
     vec2 uv = out_uv * vec2(aspectRatio, 1.0);
 
+    float v = time * .2;
+    vec2 scrollingUv = uv + vec2(v, v * .2);
+    uv += noise(scrollingUv * 5.0) * (min(1.0, distance(uv, vec2(0.9, 0.5))) * 2.0) * distort;
+
     outColor = color(uv) * colorFade;
+
+    vec2 guv = uv + noise(vec2(time)) + noise(vec2(uv));
+    float h = hash12(guv)*0.3+0.7;
+    outColor = outColor * mix(1.0, h, clamp(outColor.y, 0.7, 1.0));
 }
