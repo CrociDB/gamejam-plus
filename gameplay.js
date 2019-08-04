@@ -7,7 +7,7 @@ class GameplayState {
 
         this.cameraPos = new Vec3(-5, 10, -20);
         this.shipPos = new Vec3(0, 2.2, 0);
-        this.currentLevel = 0;
+        this.currentLevel = 3;
 
         let shader = this.manager.params.shader;
         let shaderCodes = this.manager.params.shaderCodes;
@@ -231,7 +231,7 @@ class GameLevel {
                     this.obstacles[i].z -= this.levelData.speed;
                     let t = Math.min(1.0 - (this.obstacles[i].z - 50) / 90, 1);
                     this.obstacles[i].y = (1 - t) * -5 + t * 5
-                    if (this.obstacles[i].z <= -10) {
+                    if (this.obstacles[i].z <= -10 && this.finished == 0) {
                         this.obstacles[i] = this.generateSingleObstacle(false);
                     };
     
@@ -241,7 +241,7 @@ class GameLevel {
                 }
             }
 
-            if (i >= this.levelData.obsMax) {
+            if (i >= this.levelData.obsMax || this.finished > 0) {
                 this.obstacles[i].y = 300;
             }
 

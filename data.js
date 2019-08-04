@@ -36,7 +36,7 @@ const LEVELS = [
         dist: 350,
         speed: .5,
         distort: .1,
-        background: new Vec3(0.1, 0.3, 0.4)
+        background: new Vec3(0.0, 0.0, 0.0)
     },
     {
         entry: [
@@ -49,12 +49,12 @@ const LEVELS = [
         dist: 100,
         speed: .5,
         distort: .1,
-        background: new Vec3(0.2, 0.5, 0.6)
+        background: new Vec3(0.0, 0.0, 0.0)
     },
     {
         entry: [
             "What are those things?",
-            "Should I avoid it?"],
+            "Should I avoid them?"],
         death: [
             "NO! I'm being consumed by those spikey thoughts!",
             "Avoid it!"
@@ -65,7 +65,41 @@ const LEVELS = [
         obsMax: 3,
         dist: 500,
         speed: .5,
-        distort: .1,
-        background: new Vec3(0.2, 0.5, 0.6)
+        distort: .13,
+        background: new Vec3(0.2, 0.0, 0.0)
     },
+    {
+        entry: [
+            "I don't feel so well.",
+            "But that's good, right? If I feel therefore I am."],
+        death: [
+            "NO! I'm being consumed by those spikey thoughts!",
+            "Avoid it!"
+        ],
+        obsDepth: 300,
+        obsMinDist: 200,
+        obsMul: 400,
+        obsMax: 4,
+        dist: 500,
+        speed: .6,
+        distort: .16,
+        background: new Vec3(0.3, 0.0, 0.05)
+    },
+    {
+        entry: [
+            "But what am I?",
+            "I'm pretty sure I'm not a ship."],
+        death: [
+            "NO! I'm being consumed by those spikey thoughts!",
+            "Avoid it!"
+        ],
+        obsDepth: 250,
+        obsMinDist: 150,
+        obsMul: 400,
+        obsMax: 4,
+        dist: 500,
+        speed: .6,
+        distort: .17,
+        background: new Vec3(0.36, 0.0, 0.05)
+    }
 ];
