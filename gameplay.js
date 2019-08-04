@@ -185,9 +185,8 @@ class GameLevel {
             } else if (input.blink == 2) {
                 this.ship.moveRight();
             }
-            game.shipPos = this.ship.pos;
         }
-
+        game.shipPos = this.ship.pos;
         game.cameraPos = game.cameraPos.add(Vec3.up.muls(game.dist - 5));
 
         this.baseDepth -= this.levelData.speed;
