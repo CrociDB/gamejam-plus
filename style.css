@@ -1,7 +1,7 @@
 body {
     background-color: black;
 
-    font-family: "Trebuchet MS";
+    font-family: "Courier";
 
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -18,7 +18,8 @@ body {
     display: block;
     margin-left: auto;
     margin-right: auto;
-    border: 3px solid #EE7147;
+    border-radius: 14px;
+    border: 3px solid #5c666d;
 }
 
 .hidden {
@@ -38,20 +39,19 @@ body {
     max-width: 300px;
     
     margin: auto;
-    border-radius: 5px;
+    border-radius: 7px;
     padding: 20px;
     
     background-color: #2F3439;
     padding-bottom: 15px; 
-    border-bottom: 5px solid #EE7147;
-    opacity: 1;
+    opacity: .6;
     transition: opacity 200ms  ease-in;
 }
 
 #dialog .message {
-    color: #ACACAC;
+    color: #96b0c2;
     text-transform: uppercase;
-    letter-spacing: -0.06em;
+    letter-spacing: 0.16em;
     font-size: 22px;
 }
 
@@ -65,8 +65,8 @@ body {
     padding-left: 50px;
     padding-right: 50px;
     border-radius: 5px;
-    border: 2px solid #EE7147;
-    border-bottom: 5px solid #EE7147;
+    border: 2px solid #5c666d;
+    border-bottom: 5px solid #5c666d;
     background-color: #3d434a;
-    color: #495259;
+    color: #7f8f9b;
 }

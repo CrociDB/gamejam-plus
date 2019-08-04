@@ -200,8 +200,10 @@ class GameLevel {
                 if (this.finished == 1) {
                     this.manager.setState(new Dead());
                 } else {
-                    this.manager.game.currentLevel++;
-                    this.manager.setState(new Entry());
+                    if (this.manager.game.currentLevel < LEVELS.length - 1) {
+                        this.manager.game.currentLevel++;
+                        this.manager.setState(new Entry());
+                    }
                 }
             }
         } else {
@@ -222,16 +224,22 @@ class GameLevel {
         for (let i = 0; i < this.obstacles.length; i++) {
             if (this.finished == 0)
             {
-                this.obstacles[i].z -= this.levelData.speed;
-                let t = Math.min(1.0 - (this.obstacles[i].z - 50) / 90, 1);
-                this.obstacles[i].y = (1 - t) * -5 + t * 5
-                if (this.obstacles[i].z <= -10) {
-                    this.obstacles[i] = this.generateSingleObstacle(false);
-                };
-
-                if (Vec3.distance(this.ship.pos, this.obstacles[i]) < 5) {
-                    this.finished = 1;
+                if (i < this.levelData.obsMax) {
+                    this.obstacles[i].z -= this.levelData.speed;
+                    let t = Math.min(1.0 - (this.obstacles[i].z - 50) / 90, 1);
+                    this.obstacles[i].y = (1 - t) * -5 + t * 5
+                    if (this.obstacles[i].z <= -10) {
+                        this.obstacles[i] = this.generateSingleObstacle(false);
+                    };
+    
+                    if (Vec3.distance(this.ship.pos, this.obstacles[i]) < 5) {
+                        this.finished = 1;
+                    }
                 }
+            }
+
+            if (i >= this.levelData.obsMax) {
+                this.obstacles[i].y = 300;
             }
 
             shader.uniformv("obstacle" + (i + 1), this.obstacles[i]);
