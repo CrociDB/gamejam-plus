@@ -59,9 +59,9 @@ const LEVELS = [
             "Yes. Definitely.",
             "It hurts me."
         ],
-        obsDepth: 300,
+        obsDepth: 100,
         obsMinDist: 200,
-        obsMul: 400,
+        obsMul: 5,
         obsMax: 3,
         dist: 500,
         speed: .5,
@@ -76,9 +76,9 @@ const LEVELS = [
             "NO! I'm being consumed by those spikey thoughts!",
             "Avoid it!"
         ],
-        obsDepth: 300,
+        obsDepth: 100,
         obsMinDist: 200,
-        obsMul: 400,
+        obsMul: 4,
         obsMax: 4,
         dist: 500,
         speed: .6,
@@ -93,9 +93,9 @@ const LEVELS = [
             "I'm not a ship. But these spikey things still not good.",
             "Avoid it!"
         ],
-        obsDepth: 250,
-        obsMinDist: 150,
-        obsMul: 400,
+        obsDepth: 80,
+        obsMinDist: 100,
+        obsMul: 3,
         obsMax: 4,
         dist: 500,
         speed: .6,
@@ -110,9 +110,9 @@ const LEVELS = [
             "These are the bad thoughts!",
             "DO NOT TOUCH IT!"
         ],
-        obsDepth: 300,
-        obsMinDist: 150,
-        obsMul: 400,
+        obsDepth: 100,
+        obsMinDist: 100,
+        obsMul: 3,
         obsMax: 5,
         dist: 550,
         speed: .6,
@@ -126,9 +126,9 @@ const LEVELS = [
         death: [
             "Bad thoughts again."
         ],
-        obsDepth: 300,
-        obsMinDist: 150,
-        obsMul: 400,
+        obsDepth: 100,
+        obsMinDist: 70,
+        obsMul: 3,
         obsMax: 5,
         dist: 600,
         speed: .7,
@@ -142,9 +142,9 @@ const LEVELS = [
         death: [
             "Bad thoughts again. RUN FROM IT!"
         ],
-        obsDepth: 300,
-        obsMinDist: 150,
-        obsMul: 400,
+        obsDepth: 70,
+        obsMinDist: 70,
+        obsMul: 3,
         obsMax: 6,
         dist: 650,
         speed: .75,
@@ -159,9 +159,9 @@ const LEVELS = [
         death: [
             "That ain't no good."
         ],
-        obsDepth: 500,
-        obsMinDist: 150,
-        obsMul: 400,
+        obsDepth: 80,
+        obsMinDist: 70,
+        obsMul: 3,
         obsMax: 7,
         dist: 750,
         speed: .8,
@@ -176,9 +176,9 @@ const LEVELS = [
         death: [
             "Not that again..."
         ],
-        obsDepth: 500,
-        obsMinDist: 150,
-        obsMul: 400,
+        obsDepth: 80,
+        obsMinDist: 70,
+        obsMul: 3,
         obsMax: 7,
         dist: 850,
         speed: .85,
@@ -191,9 +191,9 @@ const LEVELS = [
         death: [
             "Shit."
         ],
-        obsDepth: 600,
-        obsMinDist: 80,
-        obsMul: 400,
+        obsDepth: 80,
+        obsMinDist: 70,
+        obsMul: 3,
         obsMax: 8,
         dist: 850,
         speed: .9,
@@ -206,9 +206,9 @@ const LEVELS = [
         death: [
             "Shit."
         ],
-        obsDepth: 660,
-        obsMinDist: 80,
-        obsMul: 400,
+        obsDepth: 60,
+        obsMinDist: 70,
+        obsMul: 3,
         obsMax: 8,
         dist: 750,
         speed: .9,
@@ -221,9 +221,9 @@ const LEVELS = [
         death: [
             "Crap."
         ],
-        obsDepth: 700,
+        obsDepth: 60,
         obsMinDist: 70,
-        obsMul: 400,
+        obsMul: 3,
         obsMax: 9,
         dist: 750,
         speed: .95,

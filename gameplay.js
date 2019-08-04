@@ -7,7 +7,7 @@ class GameplayState {
 
         this.cameraPos = new Vec3(-5, 10, -20);
         this.shipPos = new Vec3(0, 2.2, 0);
-        this.currentLevel = 0;
+        this.currentLevel = 9;
 
         let shader = this.manager.params.shader;
         let shaderCodes = this.manager.params.shaderCodes;
@@ -154,8 +154,8 @@ class GameLevel {
     
     generateSingleObstacle(d) {
         let lane = Math.ceil(Math.random() * 3) - 2;
-        let r = d ? Math.round(this.levelData.obsDepth / this.levelData.obsMul) : Math.round(this.levelData.obsMinDist / this.levelData.obsMul)
-        let dist = 150 + Math.random() * r * this.levelData.obsMul;
+        let r = d ? this.levelData.obsDepth : this.levelData.obsMinDist
+        let dist = 150 + Math.ceil(Math.random() * r) * this.levelData.obsMul;
         //return new Vec3(0, 0, 0);
         return new Vec3(this.obstaclesWide + lane * 10, 0, dist);
     }
