@@ -7,7 +7,7 @@ class GameplayState {
 
         this.cameraPos = new Vec3(-5, 10, -20);
         this.shipPos = new Vec3(0, 2.2, 0);
-        this.currentLevel = 3;
+        this.currentLevel = 0;
 
         let shader = this.manager.params.shader;
         let shaderCodes = this.manager.params.shaderCodes;

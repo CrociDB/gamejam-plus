@@ -123,7 +123,7 @@ function initWebGL()
         input: input,
         dialog: dialog,
         title: title });
-    stateManager.setState(new GameplayState());
+    stateManager.setState(new MenuState());
 
     let loop = (timestamp) => {
         // Render

@@ -33,7 +33,7 @@ const LEVELS = [
         obsMinDist: 100,
         obsMul: 400,
         obsMax: 0,
-        dist: 350,
+        dist: 250,
         speed: .5,
         distort: .1,
         background: new Vec3(0.0, 0.0, 0.0)
@@ -56,8 +56,8 @@ const LEVELS = [
             "What are those things?",
             "Should I avoid them?"],
         death: [
-            "NO! I'm being consumed by those spikey thoughts!",
-            "Avoid it!"
+            "Yes. Definitely.",
+            "It hurts me."
         ],
         obsDepth: 300,
         obsMinDist: 200,
@@ -90,7 +90,7 @@ const LEVELS = [
             "But what am I?",
             "I'm pretty sure I'm not a ship."],
         death: [
-            "NO! I'm being consumed by those spikey thoughts!",
+            "I'm not a ship. But these spikey things still not good.",
             "Avoid it!"
         ],
         obsDepth: 250,
@@ -107,8 +107,8 @@ const LEVELS = [
             "Why do these bad thoughts keep coming?",
             "It's getting harder to dodge."],
         death: [
-            "NO! I'm being consumed by those spikey thoughts!",
-            "Avoid it!"
+            "These are the bad thoughts!",
+            "DO NOT TOUCH IT!"
         ],
         obsDepth: 300,
         obsMinDist: 150,
@@ -122,10 +122,9 @@ const LEVELS = [
     {
         entry: [
             "Maybe it's just a dream.",
-            "But I still can't remember who am I."],
+            "But I still can't remember who I am."],
         death: [
-            "NO! I'm being consumed by those spikey thoughts!",
-            "Avoid it!"
+            "Bad thoughts again."
         ],
         obsDepth: 300,
         obsMinDist: 150,
@@ -135,6 +134,113 @@ const LEVELS = [
         speed: .7,
         distort: .17,
         background: new Vec3(0.36, 0.0, 0.05)
+    },
+    {
+        entry: [
+            "Nah, if I'm a person, I should dream of people",
+            "So either I'm actually a ship, or it's not a dream"],
+        death: [
+            "Bad thoughts again. RUN FROM IT!"
+        ],
+        obsDepth: 300,
+        obsMinDist: 150,
+        obsMul: 400,
+        obsMax: 6,
+        dist: 650,
+        speed: .75,
+        distort: .17,
+        background: new Vec3(0.3, 0.1, 0.1)
+    },
+    {
+        entry: [
+            "Actually...",
+            "I can't be a ship.",
+            "Ships are made by humans"],
+        death: [
+            "That ain't no good."
+        ],
+        obsDepth: 500,
+        obsMinDist: 150,
+        obsMul: 400,
+        obsMax: 7,
+        dist: 750,
+        speed: .8,
+        distort: .18,
+        background: new Vec3(0.25, 0.1, 0.15)
+    },
+    {
+        entry: [
+            "So I might have made this ship",
+            "... in my mind, at least.",
+            "YES! In my mind. I have a mind."],
+        death: [
+            "Not that again..."
+        ],
+        obsDepth: 500,
+        obsMinDist: 150,
+        obsMul: 400,
+        obsMax: 7,
+        dist: 850,
+        speed: .85,
+        distort: .19,
+        background: new Vec3(0.2, 0.12, 0.25)
+    },
+    {
+        entry: [
+            "That's only me."],
+        death: [
+            "Shit."
+        ],
+        obsDepth: 600,
+        obsMinDist: 80,
+        obsMul: 400,
+        obsMax: 8,
+        dist: 850,
+        speed: .9,
+        distort: .23,
+        background: new Vec3(0.1, 0.2, 0.35)
+    },
+    {
+        entry: [
+            "I'm recovering"],
+        death: [
+            "Shit."
+        ],
+        obsDepth: 660,
+        obsMinDist: 80,
+        obsMul: 400,
+        obsMax: 8,
+        dist: 750,
+        speed: .9,
+        distort: .1,
+        background: new Vec3(0.1, 0.25, 0.45)
+    },
+    {
+        entry: [
+            "Yes. I'm better, now."],
+        death: [
+            "Crap."
+        ],
+        obsDepth: 700,
+        obsMinDist: 70,
+        obsMul: 400,
+        obsMax: 9,
+        dist: 750,
+        speed: .95,
+        distort: .05,
+        background: new Vec3(0.1, 0.28, 0.45)
+    },
+    {
+        entry: [
+            "I'm fine."],
+        obsDepth: 500,
+        obsMinDist: 150,
+        obsMul: 400,
+        obsMax: 1,
+        dist: 550,
+        speed: .95,
+        distort: .05,
+        background: new Vec3(0.2, 0.3, 0.45)
     },
     {
         entry: [

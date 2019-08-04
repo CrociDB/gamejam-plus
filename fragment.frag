@@ -104,7 +104,7 @@ object getDist(vec3 p)
     vec3 d = vec3(0, 0, base_depth);
     object ofloor = ofloor(p);
 
-    const float s = .9;
+    const float s = 2.9;
     float obs1 = obstacle((p - obstacle1) * rotateY(time * 2.0));
     float obs2 = obstacle((p - obstacle2) * rotateY(time * 2.0));
     float obs3 = obstacle((p - obstacle3) * rotateY(time * 2.0));
