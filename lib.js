@@ -148,7 +148,7 @@ const playaudio = (a) => {
 };
 const playaudiorand = (l) => {
     if (PLAY_AUDIO) {
-        playaudio(l[randint(l.length)]);
+        playaudio(l[randint(l.length - 1)]);
     }
 };
 
