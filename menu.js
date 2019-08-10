@@ -2,6 +2,8 @@ class MenuState {
     enter(manager) {
         this.manager = manager;
 
+        this.manager.params.bgm.play("music-menu");
+
         this.speed = .3;
         this.dist = 12;
 
@@ -32,6 +34,9 @@ class MenuState {
     startGame() {
         let shader = this.manager.params.shader;
         let that = this;
+
+        this.manager.params.bgm.stop("music-menu");
+
         co(function*() {
             let col = 1.0;
             while (col > 0.0) {

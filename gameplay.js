@@ -2,6 +2,8 @@ class GameplayState {
     enter(manager) {
         this.manager = manager;
 
+        this.manager.params.bgm.play("music-gameplay");
+
         this.speed = .3;
         this.dist = 12;
 
@@ -204,6 +206,7 @@ class GameLevel {
                         this.manager.game.currentLevel++;
                         this.manager.setState(new Entry());
                     } else {
+                        this.manager.params.bgm.stop("music-gameplay");
                         game.manager.setState(new MenuState());
                     }
                 }

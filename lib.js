@@ -121,3 +121,48 @@ const co = (f) => {
 
     next();
 };
+
+// Audio
+const PLAY_AUDIO = true;
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+const audioContext = new AudioContext();
+if (audioContext.state === 'suspended') {
+    audioContext.resume();
+}
+
+class BGM {
+    constructor(files) {
+        this.tracks = {};
+        for (let i = 0; i < files.length; i++) {
+            let audioElement = document.getElementById(files[i])
+            let track = audioContext.createMediaElementSource(audioElement);
+
+            
+            track.connect(audioContext.destination);
+            track.mediaElement.loop = true;
+            this.tracks[files[i]] = track;
+        }
+    }
+
+    play(song) {
+        if (!PLAY_AUDIO) return;
+
+        if (audioContext.state === 'suspended') {
+            audioContext.resume();
+        }
+
+        console.dir(this.tracks);
+        this.tracks[song].mediaElement.play();
+    }
+
+    stop(song) {
+        if (!PLAY_AUDIO) return;
+        
+        if (audioContext.state === 'suspended') {
+            audioContext.resume();
+        }
+
+        console.dir(this.tracks);
+        this.tracks[song].mediaElement.pause();
+    }
+}

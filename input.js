@@ -18,7 +18,7 @@ class Input {
         this.blink = 0;
         this.lastSpace = 0;
 
-        canvas.addEventListener("click", this.lockPointer.bind(this));
+        //canvas.addEventListener("click", this.lockPointer.bind(this));
         
         document.addEventListener("keydown", this.keydown.bind(this));   
         document.addEventListener("keyup", this.keyup.bind(this));

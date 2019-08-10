@@ -74,6 +74,10 @@ function initWebGL()
     canvas = document.getElementById("game-canvas");
     gl = canvas.getContext("webgl2");
 
+    canvas.addEventListener("click", () => {
+        audioContext.resume();
+    })
+
     let width = canvas.width;
     let height = canvas.height;
 
@@ -116,13 +120,16 @@ function initWebGL()
 
     let title = document.getElementById("game-title");
 
+    let bgm = new BGM(['music-menu', 'music-gameplay']);
+
     let stateManager = new StateManager({
         gl: gl, 
         shader: shader, 
         shaderCodes: shaderCodes, 
         input: input,
         dialog: dialog,
-        title: title });
+        title: title,
+        bgm: bgm });
     stateManager.setState(new MenuState());
 
     let loop = (timestamp) => {
