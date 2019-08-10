@@ -18,6 +18,8 @@ class Dialog {
 
         console.dir(this.oneblink, this.twoblink);
 
+        playaudio(SOUNDS.dialog_open);
+
         this._show(messages[this.currentInList]);
 
         if (!dead) {
@@ -41,6 +43,7 @@ class Dialog {
             while (c < total) {
                 that.dialogText.innerHTML = message.substr(0, c);
                 c += step;
+                if (c % 3 == 0) playaudio(SOUNDS.dialog_text);
                 yield .05;
             }
             that.dialogText.innerHTML = message;
@@ -65,6 +68,8 @@ class Dialog {
         this.currentInList = -1;
         this._show(message);
 
+        playaudio(SOUNDS.dialog_open);
+
         if (!dead) {
             this.dialogElement.style.backgroundColor = "#2F3439";
         } else {
@@ -73,6 +78,7 @@ class Dialog {
     }
 
     close(callback) {
+        playaudio(SOUNDS.dialog_close);
         this.dialogElement.classList.add("hidden");
         callback();
         this.finished = false;
@@ -89,6 +95,7 @@ class Dialog {
             if (this.list != null && this.currentInList > -1 && this.currentInList < this.list.length - 1) {
                 if (blink > 0)
                 {
+                    playaudio(SOUNDS.dialog_confirm);
                     this.currentInList++;
                     this.finished = false;
                     this._show(this.list[this.currentInList]);

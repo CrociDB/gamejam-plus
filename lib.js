@@ -122,6 +122,10 @@ const co = (f) => {
     next();
 };
 
+// Randoms
+const randnum = (v = 1) => Math.random() * v;
+const randint = (v) => Math.round(randnum(v));
+
 // Audio
 const PLAY_AUDIO = true;
 const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -129,6 +133,24 @@ const audioContext = new AudioContext();
 if (audioContext.state === 'suspended') {
     audioContext.resume();
 }
+
+// Audio stuff
+const audio_player = [new Audio(), new Audio(), new Audio(), new Audio(), new Audio()];
+let audio_index = 0;
+const playaudio = (a) => {
+    if (PLAY_AUDIO) {
+        audio_index = (audio_index + 1) % audio_player.length;
+
+        audio_player[audio_index].pause();
+        audio_player[audio_index].src = a;
+        audio_player[audio_index].play();
+    }
+};
+const playaudiorand = (l) => {
+    if (PLAY_AUDIO) {
+        playaudio(l[randint(l.length)]);
+    }
+};
 
 class BGM {
     constructor(files) {

@@ -42,6 +42,11 @@ class ShipMovement {
     moveRight() {
         console.dir(this.currentPos);
         if (this.currentPos < 2 && this.movement > 0.999) {
+            playaudiorand([
+                SOUNDS.ship_moveA,
+                SOUNDS.ship_moveB,
+                SOUNDS.ship_moveC,
+            ]);
             this.oldPos = this.currentPos;
             this.currentPos++;
             this.movement = 0;
@@ -51,6 +56,11 @@ class ShipMovement {
     
     moveLeft() {
         if (this.currentPos > 0 && this.movement > 0.999) {
+            playaudiorand([
+                SOUNDS.ship_moveA,
+                SOUNDS.ship_moveB,
+                SOUNDS.ship_moveC,
+            ]);
             this.oldPos = this.currentPos;
             this.currentPos--;
             this.movement = 0;
@@ -200,6 +210,7 @@ class GameLevel {
             this.fade -= this.finished == 2 ? .015 : .2;
             if (this.fade <= 0) {
                 if (this.finished == 1) {
+                    playaudio(SOUNDS.die);
                     this.manager.setState(new Dead());
                 } else {
                     if (this.manager.game.currentLevel < LEVELS.length - 1) {
